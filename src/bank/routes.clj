@@ -15,7 +15,11 @@
     (let [response (handler request)]
       (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))))
 
-(def app
+(defn inject [handler key dependency]
+  (fn [request]
+    (handler (assoc request key dependency))))
+
+(defn app [datasource]
   (ring/ring-handler
    (ring/router
     [["/account" {:post {:handler h/handler
@@ -28,7 +32,8 @@
                              :swagger {:info {:title "Bank account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
     {:data {:coercion reitit.coercion.spec/coercion
-            :middleware [wrap-params
+            :middleware [[inject :datasource datasource]
+                         wrap-params
                          wrap-keyword-params
                          muuntaja/format-negotiate-middleware
                          muuntaja/format-response-middleware

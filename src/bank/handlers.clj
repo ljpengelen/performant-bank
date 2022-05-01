@@ -3,5 +3,6 @@
             [ring.util.response :as rr]))
 
 (defn handler [request]
-  (let [name (-> request :parameters :body :name)]
-    (rr/response (first (db/create-account! @db/datasource {:name name})))))
+  (let [name (-> request :parameters :body :name)
+        datasource (:datasource request)]
+    (rr/response (first (db/create-account! datasource {:name name})))))

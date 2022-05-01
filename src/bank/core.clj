@@ -1,25 +1,33 @@
 (ns bank.core
   (:require [bank.routes :refer [app]]
-            [clojure.java.browse :refer [browse-url]]
-            [org.httpkit.server :as http-kit]
-            [ring.middleware.reload :refer [wrap-reload]])
+            [config.core :refer [env]]
+            [hikari-cp.core :as hcp]
+            [integrant.core :as ig]
+            [migratus.core :as migratus]
+            [org.httpkit.server :as http-kit])
   (:gen-class))
 
-(defonce server (atom nil))
+(def system-config
+  {::datasource {:jdbc-url (-> env :db :jdbc-url)}
+   ::migrations {:datasource (ig/ref ::datasource)}
+   ::server {:datasource (ig/ref ::datasource)
+             :migrations (ig/ref ::migrations)}})
 
-(defn start! []
-  (when-not @server
-    (reset! server (http-kit/run-server (wrap-reload #'app) {:port 3000 :join? false}))))
+(defmethod ig/init-key ::datasource [_ {:keys [jdbc-url]}]
+  (hcp/make-datasource {:jdbc-url jdbc-url}))
 
-(defn stop! []
-  (when-let [running-server @server]
-    (running-server)
-    (reset! server nil)))
+(defmethod ig/halt-key! ::datasource [_ datasource]
+  (hcp/close-datasource datasource))
+
+(defmethod ig/init-key ::migrations [_ {:keys [datasource]}]
+  (migratus/migrate {:store :database
+                     :db {:datasource datasource}}))
+
+(defmethod ig/init-key ::server [_ {:keys [datasource]}]
+  (http-kit/run-server (app datasource) {:port 3000 :join? false}))
+
+(defmethod ig/halt-key! ::server [_ server]
+  (server))
 
 (defn -main [_]
-  (start!))
-
-(comment
-  (start!)
-  (browse-url "http://localhost:3000/api-docs")
-  (stop!))
+  (ig/init system-config))
