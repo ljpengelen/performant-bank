@@ -22,3 +22,7 @@ Obviously, this requires Clojure.
 
 Alternatively, run `clojure -T:build clean && clojure -T:build uber` to create an uberjar, followed by `java -jar target/bank-<version>-standalone.jar` to start the application.
 Starting the application like this doesn't require Clojure, only Java.
+
+## Running tests
+
+Execute `bin/kaocha --watch` to run tests continuously.
