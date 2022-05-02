@@ -13,7 +13,7 @@ If you're a beginner to Clojure and don't have a favorite setup yet, give [Visua
 
 Once you've installed Visual Studio Code and Calva, [connect Calva to the project](https://calva.io/connect/) using the project type `deps.edn` and the alias `:dev`, and start development.
 
-A convenient way to get started is opening `src/user.clj` and evaluating expressions using `alt+enter`.
+A convenient way to get started is opening `dev/user.clj` and evaluating expressions using `alt+enter`.
 
 ## Running the app
 

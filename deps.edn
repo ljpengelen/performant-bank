@@ -22,7 +22,8 @@
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.8.1" :git/sha "7d40500"}}
                    :ns-default build}
            :dev {:extra-deps {integrant/repl {:mvn/version "0.3.2"}
-                              io.github.tggreene/integrant-repl-autoreload {:git/sha "f91a1548cfa7d2757be66447660319f3d52f8aff"}}}
+                              io.github.tggreene/integrant-repl-autoreload {:git/sha "f91a1548cfa7d2757be66447660319f3d52f8aff"}}
+                 :extra-paths ["dev"]}
            :run {:exec-fn bank.core/-main}
            :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.66.1034"}}
                   :main-opts ["-m" "kaocha.runner"]}}}
