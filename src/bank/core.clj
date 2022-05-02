@@ -8,10 +8,11 @@
   (:gen-class))
 
 (def system-config
-  {::datasource {:jdbc-url (-> env :db :jdbc-url)}
+  {::datasource {:jdbc-url (:jdbc-url env)}
    ::migrations {:datasource (ig/ref ::datasource)}
    ::server {:datasource (ig/ref ::datasource)
-             :migrations (ig/ref ::migrations)}})
+             :migrations (ig/ref ::migrations)
+             :port (:port env)}})
 
 (defmethod ig/init-key ::datasource [_ {:keys [jdbc-url]}]
   (hcp/make-datasource {:jdbc-url jdbc-url}))
@@ -23,8 +24,8 @@
   (migratus/migrate {:store :database
                      :db {:datasource datasource}}))
 
-(defmethod ig/init-key ::server [_ {:keys [datasource]}]
-  (http-kit/run-server (app datasource) {:port 3000 :join? false}))
+(defmethod ig/init-key ::server [_ {:keys [datasource port]}]
+  (http-kit/run-server (app datasource) {:port port :join? false}))
 
 (defmethod ig/halt-key! ::server [_ server]
   (server))

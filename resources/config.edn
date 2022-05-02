@@ -1,1 +1,2 @@
-{:db {:jdbc-url "jdbc:sqlite:bank-dev.db"}}
+{:jdbc-url "jdbc:sqlite:bank-dev.db"
+ :port 3000}
