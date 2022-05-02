@@ -20,8 +20,10 @@
 
 (comment
   (db/create-account! (datasource) {:name "Luc Engelen"})
-  (db/post-deposit! (datasource) {:account-number 1 :amount 500})
-  (db/make-withdrawal! (datasource) {:account-number 1 :amount 100})
+  (db/persist-transaction! (datasource) {:source-account-number 1
+                                         :target-account-number 2
+                                         :credit 500
+                                         :debit nil})
   (db/set-balance! (datasource) {:account-number 1 :balance 123}))
 
 (defn migratus-config []
@@ -31,4 +33,4 @@
 (comment
   (migratus/migrate (migratus-config))
   (migratus/rollback (migratus-config))
-  (migratus/create (migratus-config) "transfer"))
+  (migratus/create (migratus-config) "transaction"))

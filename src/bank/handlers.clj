@@ -24,7 +24,10 @@
         (with-transaction [tx datasource]
           (if-let [account (db/get-account tx {:account-number account-number})]
             (do
-              (db/post-deposit! tx {:account-number account-number :amount amount})
+              (db/persist-transaction! tx {:source-account-number account-number
+                                           :target-account-number nil
+                                           :credit nil
+                                           :debit amount})
               (rr/response (db/set-balance! tx {:account-number account-number
                                                 :balance (+ amount (:balance account))})))
             (rr/bad-request {:message "Account does not exist"})))))))
@@ -39,7 +42,10 @@
           (if-let [account (db/get-account tx {:account-number account-number})]
             (if (>= (:balance account) amount)
               (do
-                (db/post-deposit! tx {:account-number account-number :amount amount})
+                (db/persist-transaction! tx {:source-account-number account-number
+                                             :target-account-number nil
+                                             :credit amount
+                                             :debit nil})
                 (rr/response (db/set-balance! tx {:account-number account-number
                                                   :balance (- (:balance account) amount)})))
               (rr/bad-request {:message "Account balance cannot fall below zero"}))
@@ -58,9 +64,10 @@
             (if (and source-account target-account)
               (if (>= (:balance source-account) amount)
                 (do
-                  (db/make-transfer! tx {:source-account-number source-account-number
-                                         :target-account-number target-account-number
-                                         :amount amount})
+                  (db/persist-transaction! tx {:source-account-number source-account-number
+                                               :target-account-number target-account-number
+                                               :credit amount
+                                               :debit nil})
                   (db/set-balance! tx {:account-number target-account-number
                                        :balance (+ (:balance target-account) amount)})
                   (rr/response (db/set-balance! tx {:account-number source-account-number

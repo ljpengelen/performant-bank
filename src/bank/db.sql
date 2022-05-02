@@ -16,17 +16,7 @@ returning account_number "account-number", name, balance
 select account_number "account-number", name, balance
 from account where account_number = :account-number
 
--- :name post-deposit! :n
--- :doc Post a deposit to a bank account
-insert into deposit (account_number, amount)
-values (:account-number, :amount)
-
--- :name make-withdrawal! :n
--- :doc Make a withdrawal from a bank account
-insert into withdrawal (account_number, amount)
-values (:account-number, :amount)
-
--- :name make-transfer! :n
--- :doc Transfer money from one bank account to another
-insert into transfer (source_account_number, target_account_number, amount)
-values (:source-account-number, :target-account-number, :amount)
+-- :name persist-transaction! :n
+-- :doc Persist a transaction
+insert into "transaction" (source_account_number, target_account_number, credit, debit)
+values (:source-account-number, :target-account-number, :credit, :debit)
