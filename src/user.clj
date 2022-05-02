@@ -24,6 +24,7 @@
                                          :target-account-number 2
                                          :credit 500
                                          :debit nil})
+  (db/get-transactions (datasource) {:account-number 2})
   (db/set-balance! (datasource) {:account-number 1 :balance 123}))
 
 (defn migratus-config []
@@ -33,4 +34,4 @@
 (comment
   (migratus/migrate (migratus-config))
   (migratus/rollback (migratus-config))
-  (migratus/create (migratus-config) "transaction"))
+  (migratus/create (migratus-config) "debit-credit"))

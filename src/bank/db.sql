@@ -18,5 +18,12 @@ from account where account_number = :account-number
 
 -- :name persist-transaction! :n
 -- :doc Persist a transaction
-insert into "transaction" (source_account_number, target_account_number, credit, debit)
-values (:source-account-number, :target-account-number, :credit, :debit)
+insert into "transaction" (credit_account_number, debit_account_number, amount)
+values (:credit-account-number, :debit-account-number, :amount)
+
+-- :name get-transactions :? :*
+-- :doc Get all transactions for an account
+select * from "transaction"
+where credit_account_number = :account-number or
+    debit_account_number = :account-number
+order by transaction_number desc

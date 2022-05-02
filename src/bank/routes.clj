@@ -58,7 +58,14 @@
                  :summary "Transfer money from the bank account in the path to the one in the body."
                  :responses {200 {:account-number int?
                                   :name string?
-                                  :balance int?}}}]]]
+                                  :balance int?}}}]
+       ["/audit" {:get {:handler h/audit-log}
+                  :parameters {:path {:account-number int?}}
+                  :summary "Get all transactions for an account"
+                  :responses {200 {:sequence int?
+                                   :debit int?
+                                   :credit int?
+                                   :description string?}}}]]]
      ["/swagger.json" {:get {:no-doc true
                              :swagger {:info {:title "Bank account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
