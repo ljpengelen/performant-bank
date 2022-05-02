@@ -1,5 +1,6 @@
 {:paths ["src" "resources"]
  :deps {clj-gatling/clj-gatling {:mvn/version "0.17.2"}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.2.780"}
         com.layerware/hugsql-core {:mvn/version "0.5.1"}
         com.layerware/hugsql-adapter-next-jdbc {:mvn/version "0.5.1"}
         criterium/criterium {:mvn/version "0.4.6"}

@@ -1,5 +1,6 @@
 (ns user
   (:require [bank.core :refer [system-config]]
+            [bank.db :as db]
             [clojure.java.browse :refer [browse-url]]
             [integrant-repl-autoreload.core :as igr-auto]
             [integrant.repl :refer [go reset set-prep!]]
@@ -14,11 +15,20 @@
   (igr-auto/start-auto-reset)
   (browse-url "http://localhost:3000/api-docs"))
 
+(defn datasource []
+  (:bank.core/datasource system))
+
+(comment
+  (db/create-account! (datasource) {:name "Luc Engelen"})
+  (db/post-deposit! (datasource) {:account-number 1 :amount 500})
+  (db/make-withdrawal! (datasource) {:account-number 1 :amount 100})
+  (db/set-balance! (datasource) {:account-number 1 :balance 123}))
+
 (defn migratus-config []
   {:store :database
-   :db {:datasource (:datasource system)}})
+   :db {:datasource (datasource)}})
 
 (comment
   (migratus/migrate (migratus-config))
   (migratus/rollback (migratus-config))
-  (migratus/create (migratus-config) "test"))
+  (migratus/create (migratus-config) "transfer"))

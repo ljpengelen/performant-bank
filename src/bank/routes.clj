@@ -22,12 +22,43 @@
 (defn app [datasource]
   (ring/ring-handler
    (ring/router
-    [["/account" {:post {:handler h/handler
-                         :parameters {:body {:name string?}}
-                         :summary "Create a new bank account."
-                         :responses {200 {:account-number int?
-                                          :name string?
-                                          :balance int?}}}}]
+    [["/account"
+      ["" {:post {:handler h/create-account!
+                  :parameters {:body {:name string?}}
+                  :summary "Create a new bank account."
+                  :responses {200 {:account-number int?
+                                   :name string?
+                                   :balance int?}}}}]
+      ["/:account-number"
+       ["" {:get {:handler h/get-account}
+            :parameters {:path {:account-number int?}}
+            :summary "Get a bank account by its number."
+            :responses {200 {:account-number int?
+                             :name string?
+                             :balance int?}
+                        404 {:message string?}}}]
+       ["/deposit" {:post {:handler h/post-deposit!}
+                    :parameters {:path {:account-number int?}
+                                 :body {:amount int?}}
+                    :summary "Post a deposit to the bank account with the given number."
+                    :responses {200 {:account-number int?
+                                     :name string?
+                                     :balance int?}}}]
+       ["/withdraw" {:post {:handler h/make-withdrawal!}
+                    :parameters {:path {:account-number int?}
+                                 :body {:amount int?}}
+                    :summary "Make a withdrawal from the bank account with the given number."
+                    :responses {200 {:account-number int?
+                                     :name string?
+                                     :balance int?}}}]
+       ["/send" {:post {:handler h/make-transfer!}
+                 :parameters {:path {:account-number int?}
+                              :body {:amount int?
+                                     :account-number int?}}
+                 :summary "Transfer money from the bank account in the path to the one in the body."
+                 :responses {200 {:account-number int?
+                                  :name string?
+                                  :balance int?}}}]]]
      ["/swagger.json" {:get {:no-doc true
                              :swagger {:info {:title "Bank account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
