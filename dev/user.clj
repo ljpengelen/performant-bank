@@ -3,7 +3,7 @@
             [bank.db :as db]
             [clojure.java.browse :refer [browse-url]]
             [integrant-repl-autoreload.core :as igr-auto]
-            [integrant.repl :refer [go reset set-prep!]]
+            [integrant.repl :refer [go halt reset set-prep!]]
             [integrant.repl.state :refer [system]]
             [migratus.core :as migratus]))
 
@@ -12,6 +12,7 @@
 (comment
   (go)
   (reset)
+  (halt)
   (igr-auto/start-auto-reset)
   (browse-url "http://localhost:3000/api-docs"))
 
