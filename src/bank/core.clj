@@ -30,5 +30,5 @@
 (defmethod ig/halt-key! ::server [_ server]
   (server))
 
-(defn -main [_]
+(defn -main [& _]
   (ig/init system-config))
