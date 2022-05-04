@@ -30,7 +30,7 @@ Execute `bin/kaocha --watch` to run tests continuously.
 ## Some remarks
 
 * For now, I'm ignoring the fact that one of the general requirements is that the API should service 1000 concurrent requests per seconds *asynchronously*.
-  I'll revisit this later to see how asynchronous processing would affect performance in practise because I am curious about the results.
+  I'll revisit this later to see how asynchronous processing would affect performance in practice because I am curious about the results.
   I didn't want to spend too much time evaluating tooling initially and stuck to what I knew.
   I did use `core.async` for an earlier hobby project, however: https://github.com/ljpengelen/clojure-energy.
 * SQLite isn't my go-to database.
