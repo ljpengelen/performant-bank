@@ -79,4 +79,4 @@
                          {:name "Transfer"
                           :request transfer!}]}]}
    {:concurrency 3
-    :requests 1000}))
+    :requests 10000}))
