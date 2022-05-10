@@ -42,6 +42,8 @@ Execute `bin/kaocha --watch` to run tests continuously.
 
   With a pool size of one, a throughput of 1000 requests per second is achievable using SQLite (`dev/load_test.clj`).
 
+  Some additional load testing with Postgres indicates a lower throughput of about half the number of requests per second.
+
 
 * I could have written a lot more tests, but I didn't feel like it.
   Although I think that a proper test suite is a necessity for production-grade software, I hardly ever write tests for the applications I write using Clojure.

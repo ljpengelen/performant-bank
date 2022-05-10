@@ -6,7 +6,7 @@
             [org.httpkit.client :as client]))
 
 (def test-system-config
-  (-> system-config
+  (-> (system-config :sqlite)
       (assoc-in [:bank.core/datasource :jdbc-url] "jdbc:sqlite:bank-test.db")
       (assoc-in [:bank.core/server :port] 3001)))
 

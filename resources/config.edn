@@ -1,2 +1,7 @@
-{:jdbc-url "jdbc:sqlite:bank-dev.db"
+{:db {:sqlite {:jdbc-url "jdbc:sqlite:bank-dev.db"
+               :maximum-pool-size 1}
+      :postgres {:jdbc-url "jdbc:postgresql:bank-dev"
+                 :username "postgres"
+                 :password "bank"
+                 :maximum-pool-size 10}}
  :port 3000}

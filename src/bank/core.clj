@@ -7,22 +7,26 @@
             [org.httpkit.server :as http-kit])
   (:gen-class))
 
-(def system-config
-  {::datasource {:jdbc-url (:jdbc-url env)}
-   ::migrations {:datasource (ig/ref ::datasource)}
+(defn system-config [db]
+  {::datasource (-> env :db db)
+   ::migrations {:datasource (ig/ref ::datasource)
+                 :migration-dir (str "migrations/" (name db))}
    ::server {:datasource (ig/ref ::datasource)
              :migrations (ig/ref ::migrations)
              :port (:port env)}})
 
-(defmethod ig/init-key ::datasource [_ {:keys [jdbc-url]}]
+(defmethod ig/init-key ::datasource [_ {:keys [jdbc-url username password maximum-pool-size]}]
   (hcp/make-datasource {:jdbc-url jdbc-url
-                        :maximum-pool-size 1}))
+                        :username username
+                        :password password
+                        :maximum-pool-size maximum-pool-size}))
 
 (defmethod ig/halt-key! ::datasource [_ datasource]
   (hcp/close-datasource datasource))
 
-(defmethod ig/init-key ::migrations [_ {:keys [datasource]}]
+(defmethod ig/init-key ::migrations [_ {:keys [datasource migration-dir]}]
   (migratus/migrate {:store :database
+                     :migration-dir migration-dir
                      :db {:datasource datasource}}))
 
 (defmethod ig/init-key ::server [_ {:keys [datasource port]}]
@@ -32,4 +36,4 @@
   (server))
 
 (defn -main [& _]
-  (ig/init system-config))
+  (ig/init (system-config :sqlite)))
