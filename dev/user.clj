@@ -21,10 +21,9 @@
 
 (comment
   (db/create-account! (datasource) {:name "Luc Engelen"})
-  (db/persist-transaction! (datasource) {:source-account-number 1
-                                         :target-account-number 2
-                                         :credit 500
-                                         :debit nil})
+  (db/persist-transaction! (datasource) {:credit-account-number 1
+                                         :debit-account-number 2
+                                         :amount 500})
   (db/get-transactions (datasource) {:account-number 2})
   (db/set-balance! (datasource) {:account-number 1 :balance 123}))
 
