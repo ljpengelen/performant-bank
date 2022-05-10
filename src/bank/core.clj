@@ -15,7 +15,8 @@
              :port (:port env)}})
 
 (defmethod ig/init-key ::datasource [_ {:keys [jdbc-url]}]
-  (hcp/make-datasource {:jdbc-url jdbc-url}))
+  (hcp/make-datasource {:jdbc-url jdbc-url
+                        :maximum-pool-size 1}))
 
 (defmethod ig/halt-key! ::datasource [_ datasource]
   (hcp/close-datasource datasource))
