@@ -37,7 +37,12 @@ Execute `bin/kaocha --watch` to run tests continuously.
   Usually, I'd start with Postgres running in a Docker container.
   However, I don't have any images for Postgres on my laptop at the moment, and I'm working on this project from France, without a proper internet connnection.
   I didn't want to spend all my mobile data on downloading Docker images, so I decided to see how far SQLite would take this app.
-  Initially, SQLite seemed to perform quite well (`dev/benchmark.clj`), but some more testing indicates that it's probably not fit for this job (`dev/load_test.clj`).
+
+  ~~Initially, SQLite seemed to perform quite well (`dev/benchmark.clj`), but some more testing indicates that it's probably not fit for this job (`dev/load_test.clj`).`~~
+
+  With a pool size of one, a throughput of 1000 requests per second is achievable using SQLite (`dev/load_test.clj`).
+
+
 * I could have written a lot more tests, but I didn't feel like it.
   Although I think that a proper test suite is a necessity for production-grade software, I hardly ever write tests for the applications I write using Clojure.
   Those applications are usually hobby projects, prototypes, etc. for which extensive testing doesn't make much sense.
