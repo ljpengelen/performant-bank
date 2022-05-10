@@ -8,7 +8,7 @@
             [integrant.repl.state :refer [system]]
             [migratus.core :as migratus]))
 
-(set-prep! (constantly (system-config :postgres)))
+(set-prep! (constantly (system-config :sqlite)))
 
 (comment
   (go)

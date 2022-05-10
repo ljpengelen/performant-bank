@@ -4,22 +4,22 @@
             [ring.util.response :as rr]))
 
 (defn create-account! [request]
-  (let [name (-> request :parameters :body :name)
+  (let [name (-> request :body :name)
         datasource (:datasource request)]
     (rr/response (db/create-account! datasource {:name name}))))
 
 (defn get-account [request]
-  (let [account-number (-> request :parameters :path :account-number)
+  (let [account-number (-> request :path-params :account-number parse-long)
         datasource (:datasource request)]
     (if-let [account (db/get-account datasource {:account-number account-number})]
       (rr/response account)
       (rr/not-found {:message "Account not found"}))))
 
 (defn post-deposit! [request]
-  (let [amount (-> request :parameters :body :amount)]
+  (let [amount (-> request :body :amount)]
     (if (<= amount 0)
       (rr/bad-request {:message "Amount must be positive"})
-      (let [account-number (-> request :parameters :path :account-number)
+      (let [account-number (-> request :path-params :account-number parse-long)
             datasource (:datasource request)]
         (with-transaction [tx datasource]
           (if-let [account (db/get-account tx {:account-number account-number})]
@@ -32,10 +32,10 @@
             (rr/bad-request {:message "Account does not exist"})))))))
 
 (defn make-withdrawal! [request]
-  (let [amount (-> request :parameters :body :amount)]
+  (let [amount (-> request :body :amount)]
     (if (<= amount 0)
       (rr/bad-request {:message "Amount must be positive"})
-      (let [account-number (-> request :parameters :path :account-number)
+      (let [account-number (-> request :path-params :account-number parse-long)
             datasource (:datasource request)]
         (with-transaction [tx datasource]
           (if-let [account (db/get-account tx {:account-number account-number})]
@@ -50,11 +50,11 @@
             (rr/bad-request {:message "Account does not exist"})))))))
 
 (defn make-transfer! [request]
-  (let [amount (-> request :parameters :body :amount)]
+  (let [amount (-> request :body :amount)]
     (if (<= amount 0)
       (rr/bad-request {:message "Amount must be positive"})
-      (let [credit-account-number (-> request :parameters :path :account-number)
-            debit-account-number (-> request :parameters :body :account-number)
+      (let [credit-account-number (-> request :path-params :account-number parse-long)
+            debit-account-number (-> request :body :account-number)
             datasource (:datasource request)]
         (with-transaction [tx datasource]
           (let [source-account (db/get-account tx {:account-number credit-account-number})
@@ -88,7 +88,7 @@
       (assoc :sequence transaction_number)))
 
 (defn audit-log [request]
-  (let [account-number (-> request :parameters :path :account-number)
+  (let [account-number (-> request :path-params :account-number parse-long)
         datasource (:datasource request)]
     (if-let [transactions (db/get-transactions datasource {:account-number account-number})]
       (rr/response (map #(make-log-entry account-number %) transactions))

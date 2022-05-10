@@ -1,10 +1,9 @@
 (ns bank.routes
   (:require [bank.handlers :as h]
-            [muuntaja.core :as m]
+            [jsonista.core :refer [keyword-keys-object-mapper read-value
+                                   write-value-as-string]]
             [reitit.coercion.spec]
             [reitit.ring :as ring]
-            [reitit.ring.coercion :as coercion]
-            [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -18,6 +17,13 @@
 (defn inject [handler key dependency]
   (fn [request]
     (handler (assoc request key dependency))))
+
+(defn jsonize [handler]
+  (fn [{:keys [body] :as request}]
+    (let [response (handler (assoc request :body (read-value body keyword-keys-object-mapper)))]
+      (-> response
+          (assoc :body (write-value-as-string (:body response)))
+          (update :headers assoc "Content-type" "application/json")))))
 
 (defn app [datasource]
   (ring/ring-handler
@@ -73,13 +79,8 @@
             :middleware [[inject :datasource datasource]
                          wrap-params
                          wrap-keyword-params
-                         muuntaja/format-negotiate-middleware
-                         muuntaja/format-response-middleware
-                         muuntaja/format-request-middleware
-                         coercion/coerce-response-middleware
-                         coercion/coerce-request-middleware
-                         no-caching]
-            :muuntaja m/instance}})
+                         jsonize
+                         no-caching]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api-docs"})
