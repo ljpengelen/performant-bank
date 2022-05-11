@@ -2,6 +2,7 @@
   (:require [bank.handlers :as h]
             [jsonista.core :refer [keyword-keys-object-mapper read-value
                                    write-value-as-string]]
+            [org.httpkit.server :refer [as-channel send!]]
             [reitit.coercion.spec]
             [reitit.ring :as ring]
             [reitit.swagger :as swagger]
@@ -9,21 +10,66 @@
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.params :refer [wrap-params]]))
 
-(defn no-caching [handler]
-  (fn [request]
-    (let [response (handler request)]
-      (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))))
+(defn respond-async [channel]
+  (fn [response]
+    (send! channel response)))
 
-(defn inject [handler key dependency]
-  (fn [request]
-    (handler (assoc request key dependency))))
+(defn raise-async [channel]
+  (fn [error]
+    (println error)
+    (send! channel {:status 500 :body "Internal server error"})))
 
-(defn jsonize [handler]
-  (fn [{:keys [body] :as request}]
-    (let [response (handler (assoc request :body (read-value body keyword-keys-object-mapper)))]
-      (-> response
-          (assoc :body (write-value-as-string (:body response)))
-          (update :headers assoc "Content-type" "application/json")))))
+(defn wrap-async [handler]
+  (fn [request]
+    (as-channel
+     request
+     {:on-open (fn [channel]
+                 (handler
+                  request
+                  (respond-async channel)
+                  (raise-async channel)))})))
+
+(defn no-caching-response [response]
+  (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))
+
+(defn wrap-no-caching [handler]
+  (fn
+    ([request]
+     (no-caching-response (handler request)))
+    ([request respond raise]
+     (handler request (comp respond no-caching-response) raise))))
+
+(defn inject-request [request key dependency]
+  (assoc request key dependency))
+
+(defn wrap-inject [handler key dependency]
+  (fn
+    ([request]
+     (handler (inject-request request key dependency)))
+    ([request respond raise]
+     (handler (inject-request request key dependency) respond raise))))
+
+(defn json-request [{:keys [body] :as request}]
+  (assoc request :body (read-value body keyword-keys-object-mapper)))
+
+(defn wrap-json-request [handler]
+  (fn
+    ([request]
+     (handler (json-request request)))
+    ([request respond raise]
+     (handler (json-request request) respond raise))))
+
+(defn json-response [response]
+  (-> response
+      (assoc :body (write-value-as-string (:body response)))
+      (update :headers assoc "Content-type" "application/json")))
+
+(defn wrap-json-response [handler]
+  (fn
+    ([request]
+     (json-response (handler request)))
+    ([request respond raise]
+     (handler request (comp respond json-response) raise))))
 
 (defn app [datasource]
   (ring/ring-handler
@@ -76,11 +122,13 @@
                              :swagger {:info {:title "Bank account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
     {:data {:coercion reitit.coercion.spec/coercion
-            :middleware [[inject :datasource datasource]
+            :middleware [wrap-async
+                         [wrap-inject :datasource datasource]
                          wrap-params
                          wrap-keyword-params
-                         jsonize
-                         no-caching]}})
+                         wrap-json-request
+                         wrap-json-response
+                         wrap-no-caching]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api-docs"})

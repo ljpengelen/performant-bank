@@ -3,22 +3,23 @@
             [next.jdbc :refer [with-transaction]]
             [ring.util.response :as rr]))
 
-(defn create-account! [request]
-  (let [name (-> request :body :name)
-        datasource (:datasource request)]
-    (rr/response (db/create-account! datasource {:name name}))))
+(defn create-account!
+  ([request respond _raise]
+   (let [name (-> request :body :name)
+         datasource (:datasource request)]
+     (respond (rr/response (db/create-account! datasource {:name name}))))))
 
-(defn get-account [request]
+(defn get-account [request respond _raise]
   (let [account-number (-> request :path-params :account-number parse-long)
         datasource (:datasource request)]
     (if-let [account (db/get-account datasource {:account-number account-number})]
-      (rr/response account)
-      (rr/not-found {:message "Account not found"}))))
+      (respond (rr/response account))
+      (respond (rr/not-found {:message "Account not found"})))))
 
-(defn post-deposit! [request]
+(defn post-deposit! [request respond _raise]
   (let [amount (-> request :body :amount)]
     (if (<= amount 0)
-      (rr/bad-request {:message "Amount must be positive"})
+      (respond (rr/bad-request {:message "Amount must be positive"}))
       (let [account-number (-> request :path-params :account-number parse-long)
             datasource (:datasource request)]
         (with-transaction [tx datasource]
@@ -27,14 +28,14 @@
               (db/persist-transaction! tx {:credit-account-number nil
                                            :debit-account-number account-number
                                            :amount amount})
-              (rr/response (db/set-balance! tx {:account-number account-number
-                                                :balance (+ amount (:balance account))})))
-            (rr/bad-request {:message "Account does not exist"})))))))
+              (respond (rr/response (db/set-balance! tx {:account-number account-number
+                                                         :balance (+ amount (:balance account))}))))
+            (respond (rr/bad-request {:message "Account does not exist"}))))))))
 
-(defn make-withdrawal! [request]
+(defn make-withdrawal! [request respond _raise]
   (let [amount (-> request :body :amount)]
     (if (<= amount 0)
-      (rr/bad-request {:message "Amount must be positive"})
+      (respond (rr/bad-request {:message "Amount must be positive"}))
       (let [account-number (-> request :path-params :account-number parse-long)
             datasource (:datasource request)]
         (with-transaction [tx datasource]
@@ -44,15 +45,15 @@
                 (db/persist-transaction! tx {:credit-account-number account-number
                                              :debit-account-number nil
                                              :amount amount})
-                (rr/response (db/set-balance! tx {:account-number account-number
-                                                  :balance (- (:balance account) amount)})))
-              (rr/bad-request {:message "Account balance cannot fall below zero"}))
-            (rr/bad-request {:message "Account does not exist"})))))))
+                (respond (rr/response (db/set-balance! tx {:account-number account-number
+                                                           :balance (- (:balance account) amount)}))))
+              (respond (rr/bad-request {:message "Account balance cannot fall below zero"})))
+            (respond (rr/bad-request {:message "Account does not exist"}))))))))
 
-(defn make-transfer! [request]
+(defn make-transfer! [request respond raise]
   (let [amount (-> request :body :amount)]
     (if (<= amount 0)
-      (rr/bad-request {:message "Amount must be positive"})
+      (respond (rr/bad-request {:message "Amount must be positive"}))
       (let [credit-account-number (-> request :path-params :account-number parse-long)
             debit-account-number (-> request :body :account-number)
             datasource (:datasource request)]
@@ -67,10 +68,10 @@
                                                :amount amount})
                   (db/set-balance! tx {:account-number debit-account-number
                                        :balance (+ (:balance target-account) amount)})
-                  (rr/response (db/set-balance! tx {:account-number credit-account-number
-                                                    :balance (- (:balance source-account) amount)})))
-                (rr/bad-request {:message "Account balance cannot fall below zero"}))
-              (rr/bad-request {:message "Account does not exist"}))))))))
+                  (respond (rr/response (db/set-balance! tx {:account-number credit-account-number
+                                                             :balance (- (:balance source-account) amount)}))))
+                (respond (rr/bad-request {:message "Account balance cannot fall below zero"})))
+              (respond (rr/bad-request {:message "Account does not exist"})))))))))
 
 (defn make-log-entry [account-number {:keys [transaction_number
                                              credit_account_number
@@ -87,9 +88,9 @@
                                                 :description (str "receive from #" credit_account_number)})
       (assoc :sequence transaction_number)))
 
-(defn audit-log [request]
+(defn audit-log [request respond _raise]
   (let [account-number (-> request :path-params :account-number parse-long)
         datasource (:datasource request)]
     (if-let [transactions (db/get-transactions datasource {:account-number account-number})]
-      (rr/response (map #(make-log-entry account-number %) transactions))
-      (rr/not-found {:message "Account not found"}))))
+      (respond (rr/response (map #(make-log-entry account-number %) transactions)))
+      (respond (rr/not-found {:message "Account not found"})))))
