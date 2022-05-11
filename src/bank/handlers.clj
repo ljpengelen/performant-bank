@@ -1,20 +1,25 @@
 (ns bank.handlers 
   (:require [bank.db :as db]
+            [clojure.core.async :refer [<! >! chan go]]
             [next.jdbc :refer [with-transaction]]
             [ring.util.response :as rr]))
 
 (defn create-account!
-  ([request respond _raise]
-   (let [name (-> request :body :name)
-         datasource (:datasource request)]
-     (respond (rr/response (db/create-account! datasource {:name name}))))))
+  [request respond _raise]
+  (let [name (-> request :body :name)
+        datasource (:datasource request)
+        account-chan (chan)]
+    (go (respond (rr/response (<! account-chan))))
+    (go (>! account-chan (db/create-account! datasource {:name name})))))
 
 (defn get-account [request respond _raise]
   (let [account-number (-> request :path-params :account-number parse-long)
-        datasource (:datasource request)]
-    (if-let [account (db/get-account datasource {:account-number account-number})]
-      (respond (rr/response account))
-      (respond (rr/not-found {:message "Account not found"})))))
+        datasource (:datasource request)
+        account-chan (chan)]
+    (go (if-let [account (<! account-chan)]
+          (respond (rr/response account))
+          (respond (rr/not-found {:message "Account not found"}))))
+    (go (>! account-chan (db/get-account datasource {:account-number account-number})))))
 
 (defn post-deposit! [request respond _raise]
   (let [amount (-> request :body :amount)]
