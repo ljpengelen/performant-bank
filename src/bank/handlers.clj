@@ -50,7 +50,7 @@
               (respond (rr/bad-request {:message "Account balance cannot fall below zero"})))
             (respond (rr/bad-request {:message "Account does not exist"}))))))))
 
-(defn make-transfer! [request respond raise]
+(defn make-transfer! [request respond _raise]
   (let [amount (-> request :body :amount)]
     (if (<= amount 0)
       (respond (rr/bad-request {:message "Amount must be positive"}))
