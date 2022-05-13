@@ -1,8 +1,14 @@
 (ns bank.handlers 
   (:require [bank.db :as db]
-            [clojure.core.async :refer [<! >! chan go]]
+            [clojure.core.async :refer [<! >! chan go] :as async]
             [next.jdbc :refer [with-transaction]]
             [ring.util.response :as rr]))
+
+(defn throw-err [v]
+  (if (instance? java.lang.Throwable v) (throw v) v))
+
+(defmacro <? [c]
+  `(throw-err (async/<! ~c)))
 
 (defn create-account!
   [request respond _raise]
@@ -12,14 +18,25 @@
     (go (respond (rr/response (<! account-chan))))
     (go (>! account-chan (db/create-account! datasource {:name name})))))
 
+(defn get-account-chan [datasource account-number]
+  (let [account-chan (chan)]
+    (go
+      (let [account (db/get-account datasource {:account-number account-number})]
+        (if account
+          (>! account-chan account)
+          (>! account-chan (ex-info "Account not found" {:status 404
+                                                         :body {:message "Account not found"}})))))
+    account-chan))
+
 (defn get-account [request respond _raise]
-  (let [account-number (-> request :path-params :account-number parse-long)
-        datasource (:datasource request)
-        account-chan (chan)]
-    (go (if-let [account (<! account-chan)]
-          (respond (rr/response account))
-          (respond (rr/not-found {:message "Account not found"}))))
-    (go (>! account-chan (db/get-account datasource {:account-number account-number})))))
+  (go
+    (try
+      (let [account-number (-> request :path-params :account-number parse-long)
+            datasource (:datasource request)
+            account (<? (get-account-chan datasource account-number))]
+        (respond (rr/response account)))
+      (catch Exception e
+        (respond (ex-data e))))))
 
 (defn post-deposit! [request respond _raise]
   (let [amount (-> request :body :amount)]
