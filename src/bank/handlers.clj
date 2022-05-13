@@ -38,21 +38,27 @@
       (catch Exception e
         (respond (ex-data e))))))
 
+(defn valid-amount [amount]
+  (if (<= amount 0)
+    (throw (ex-info "Invalid amount" {:status 400
+                                      :body {:message "Amount must be positive"}}))
+    amount))
+
 (defn post-deposit! [request respond _raise]
-  (let [amount (-> request :body :amount)]
-    (if (<= amount 0)
-      (respond (rr/bad-request {:message "Amount must be positive"}))
-      (let [account-number (-> request :path-params :account-number parse-long)
-            datasource (:datasource request)]
+  (go
+    (try
+      (let [amount (valid-amount (-> request :body :amount))
+            account-number (-> request :path-params :account-number parse-long)
+            datasource (:datasource request)
+            account (<? (get-account-chan datasource account-number))]
         (with-transaction [tx datasource]
-          (if-let [account (db/get-account tx {:account-number account-number})]
-            (do
-              (db/persist-transaction! tx {:credit-account-number nil
-                                           :debit-account-number account-number
-                                           :amount amount})
-              (respond (rr/response (db/set-balance! tx {:account-number account-number
-                                                         :balance (+ amount (:balance account))}))))
-            (respond (rr/bad-request {:message "Account does not exist"}))))))))
+          (db/persist-transaction! tx {:credit-account-number nil
+                                       :debit-account-number account-number
+                                       :amount amount})
+          (respond (rr/response (db/set-balance! tx {:account-number account-number
+                                                     :balance (+ amount (:balance account))})))))
+      (catch Exception e
+        (respond (ex-data e))))))
 
 (defn make-withdrawal! [request respond _raise]
   (let [amount (-> request :body :amount)]
