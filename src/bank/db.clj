@@ -6,4 +6,4 @@
 
 (hugsql/def-db-fns "bank/db.sql")
 (declare create-account! get-account set-balance! persist-transaction!
-         get-transactions)
+         get-transactions update-balance!)
