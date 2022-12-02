@@ -1,6 +1,6 @@
 (ns bank.handlers 
   (:require [bank.db :as db]
-            [clojure.core.async :refer [<! >! chan go] :as async]
+            [clojure.core.async :refer [<! chan go put!] :as async]
             [next.jdbc :refer [with-transaction]]
             [ring.util.response :as rr]))
 
@@ -10,22 +10,25 @@
 (defmacro <? [c]
   `(throw-err (async/<! ~c)))
 
-(defn create-account!
-  [request respond _raise]
-  (let [name (-> request :body :name)
-        datasource (:datasource request)
-        account-chan (chan)]
-    (go (respond (rr/response (<! account-chan))))
-    (go (>! account-chan (db/create-account! datasource {:name name})))))
+(defn create-account-chan [datasource name]
+  (let [account-chan (chan)]
+    (put! account-chan (db/create-account! datasource {:name name}))
+    account-chan))
+
+(defn create-account! [request respond _raise]
+  (go
+    (let [name (-> request :body :name)
+          datasource (:datasource request)
+          account (<! (create-account-chan datasource name))]
+      (respond (rr/response account)))))
 
 (defn get-account-chan [datasource account-number]
   (let [account-chan (chan)]
-    (go
-      (let [account (db/get-account datasource {:account-number account-number})]
-        (if account
-          (>! account-chan account)
-          (>! account-chan (ex-info "Account not found" {:status 404
-                                                         :body {:message "Account not found"}})))))
+    (let [account (db/get-account datasource {:account-number account-number})]
+      (if account
+        (put! account-chan account)
+        (put! account-chan (ex-info "Account not found" {:status 404
+                                                         :body {:message "Account not found"}}))))
     account-chan))
 
 (defn get-account [request respond _raise]
@@ -44,62 +47,83 @@
                                       :body {:message "Amount must be positive"}}))
     amount))
 
+(defn post-deposit-chan [datasource account-number amount]
+  (let [account-chan (chan)]
+    (with-transaction [tx datasource] 
+      (db/persist-transaction! tx {:credit-account-number nil
+                                   :debit-account-number account-number
+                                   :amount amount})
+      (let [account (db/update-balance! tx {:account-number account-number
+                                            :amount amount})]
+        (put! account-chan account)))
+    account-chan))
+
 (defn post-deposit! [request respond _raise]
   (go
     (try
       (let [amount (valid-amount (-> request :body :amount))
             account-number (-> request :path-params :account-number parse-long)
             datasource (:datasource request)
-            account (<? (get-account-chan datasource account-number))]
-        (with-transaction [tx datasource]
-          (db/persist-transaction! tx {:credit-account-number nil
-                                       :debit-account-number account-number
-                                       :amount amount})
-          (respond (rr/response (db/set-balance! tx {:account-number account-number
-                                                     :balance (+ amount (:balance account))})))))
+            _account (<? (get-account-chan datasource account-number))
+            updated-account (<? (post-deposit-chan datasource account-number amount))]
+        (respond (rr/response updated-account)))
       (catch Exception e
         (respond (ex-data e))))))
 
+(defn make-withdrawal-chan [datasource account-number amount]
+   (let [account-chan (chan)]
+     (with-transaction [tx datasource]
+       (db/persist-transaction! tx {:credit-account-number account-number
+                                    :debit-account-number nil
+                                    :amount amount})
+       (if-let [account (db/update-balance! tx {:account-number account-number
+                                                :amount (- amount)})]
+         (put! account-chan account)
+         (put! account-chan (ex-info "Account balance cannot fall below zero" {:status 400
+                                                                               :body {:message "Account balance cannot fall below zero"}}))))
+     account-chan))
+
 (defn make-withdrawal! [request respond _raise]
-  (let [amount (-> request :body :amount)]
-    (if (<= amount 0)
-      (respond (rr/bad-request {:message "Amount must be positive"}))
-      (let [account-number (-> request :path-params :account-number parse-long)
-            datasource (:datasource request)]
-        (with-transaction [tx datasource]
-          (if-let [account (db/get-account tx {:account-number account-number})]
-            (if (>= (:balance account) amount)
-              (do
-                (db/persist-transaction! tx {:credit-account-number account-number
-                                             :debit-account-number nil
-                                             :amount amount})
-                (respond (rr/response (db/set-balance! tx {:account-number account-number
-                                                           :balance (- (:balance account) amount)}))))
-              (respond (rr/bad-request {:message "Account balance cannot fall below zero"})))
-            (respond (rr/bad-request {:message "Account does not exist"}))))))))
+  (go
+    (try
+      (let [amount (valid-amount (-> request :body :amount))
+            account-number (-> request :path-params :account-number parse-long)
+            datasource (:datasource request)
+            _account (<? (get-account-chan datasource account-number))
+            updated-account (<? (make-withdrawal-chan datasource account-number amount))]
+        (respond (rr/response updated-account)))
+      (catch Exception e
+        (respond (ex-data e))))))
+
+(defn make-transfer-chan [datasource credit-account-number debit-account-number amount]
+  (let [account-chan (chan)]
+    (with-transaction [tx datasource]
+      (if-let [account (db/update-balance! tx {:account-number credit-account-number
+                                               :amount (- amount)})]
+        (do
+          (db/persist-transaction! tx {:credit-account-number credit-account-number
+                                       :debit-account-number debit-account-number
+                                       :amount amount})
+          (db/update-balance! tx {:account-number debit-account-number
+                                  :amount amount})
+          (put! account-chan account))
+        (put! account-chan (ex-info "Account balance cannot fall below zero" {:status 400
+                                                                              :body {:message "Account balance cannot fall below zero"}}))))
+    account-chan))
 
 (defn make-transfer! [request respond _raise]
-  (let [amount (-> request :body :amount)]
-    (if (<= amount 0)
-      (respond (rr/bad-request {:message "Amount must be positive"}))
-      (let [credit-account-number (-> request :path-params :account-number parse-long)
+  (go
+    (try
+      (let [amount (valid-amount (-> request :body :amount))
+            credit-account-number (-> request :path-params :account-number parse-long)
             debit-account-number (-> request :body :account-number)
-            datasource (:datasource request)]
-        (with-transaction [tx datasource]
-          (let [source-account (db/get-account tx {:account-number credit-account-number})
-                target-account (db/get-account tx {:account-number debit-account-number})]
-            (if (and source-account target-account)
-              (if (>= (:balance source-account) amount)
-                (do
-                  (db/persist-transaction! tx {:credit-account-number credit-account-number
-                                               :debit-account-number debit-account-number
-                                               :amount amount})
-                  (db/set-balance! tx {:account-number debit-account-number
-                                       :balance (+ (:balance target-account) amount)})
-                  (respond (rr/response (db/set-balance! tx {:account-number credit-account-number
-                                                             :balance (- (:balance source-account) amount)}))))
-                (respond (rr/bad-request {:message "Account balance cannot fall below zero"})))
-              (respond (rr/bad-request {:message "Account does not exist"})))))))))
+            datasource (:datasource request)
+            _source-account (<? (get-account-chan datasource credit-account-number))
+            _taget-account (<? (get-account-chan datasource debit-account-number))
+            updated-source-account (<? (make-transfer-chan datasource credit-account-number debit-account-number amount))]
+        (respond (rr/response updated-source-account)))
+      (catch Exception e
+        (respond (ex-data e))))))
 
 (defn make-log-entry [account-number {:keys [transaction_number
                                              credit_account_number
@@ -116,9 +140,18 @@
                                                 :description (str "receive from #" credit_account_number)})
       (assoc :sequence transaction_number)))
 
+(defn get-transactions-chan [datasource account-number]
+  (let [transactions-chan (chan)]
+    (put! transactions-chan (db/get-transactions datasource {:account-number account-number}))
+    transactions-chan))
+
 (defn audit-log [request respond _raise]
-  (let [account-number (-> request :path-params :account-number parse-long)
-        datasource (:datasource request)]
-    (if-let [transactions (db/get-transactions datasource {:account-number account-number})]
-      (respond (rr/response (map #(make-log-entry account-number %) transactions)))
-      (respond (rr/not-found {:message "Account not found"})))))
+  (go
+    (try
+      (let [account-number (-> request :path-params :account-number parse-long)
+            datasource (:datasource request)
+            _account (<? (get-account-chan datasource account-number))
+            transactions (<? (get-transactions-chan datasource account-number))]
+        (respond (rr/response (map #(make-log-entry account-number %) transactions))))
+      (catch Exception e
+        (respond (ex-data e))))))
