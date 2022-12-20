@@ -4,7 +4,7 @@
    :ns "user"
    :key "s"}
   {:name "Open app in browser"
-   :snippet (browse-url "http://localhost:3000//api-docs")
+   :snippet (browse-url "http://localhost:3000/api-docs")
    :ns "user"
    :key "b"}
   {:name "Restart app"
