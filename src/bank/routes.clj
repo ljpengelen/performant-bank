@@ -71,7 +71,7 @@
     ([request respond raise]
      (handler request (comp respond json-response) raise))))
 
-(defn app [datasource]
+(defn app [{:keys [datasource]}]
   (ring/ring-handler
    (ring/router
     [["/account"

@@ -4,6 +4,9 @@
 
 (hugsql/set-adapter! (next-adapter/hugsql-adapter-next-jdbc))
 
-(hugsql/def-db-fns "bank/db.sql")
+(defn def-db-fns []
+  (binding [*ns* (find-ns 'lijstje.db)]
+    (hugsql/def-db-fns "bank/db.sql")))
+
 (declare create-account! get-account set-balance! persist-transaction!
          get-transactions update-balance!)

@@ -1,7 +1,11 @@
-{:db {:sqlite {:jdbc-url "jdbc:sqlite:bank-dev.db"
-               :maximum-pool-size 1}
-      :postgres {:jdbc-url "jdbc:postgresql:bank-dev"
-                 :username "postgres"
-                 :password "bank"
-                 :maximum-pool-size 10}}
+{:async? true
+ :db :sqlite
+ :db-config {:sqlite {:jdbc-url "jdbc:sqlite:bank-dev.db"
+                      :maximum-pool-size 1
+                      :migration-dir "migrations/sqlite"}
+             :postgres {:jdbc-url "jdbc:postgresql:bank-dev"
+                        :username "postgres"
+                        :password "bank"
+                        :maximum-pool-size 10
+                        :migration-dir "migrations/postgres"}}
  :port 3000}
