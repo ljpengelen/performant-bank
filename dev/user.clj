@@ -5,7 +5,7 @@
             [clojure.core.async :refer [<!!]]
             [clojure.java.browse :refer [browse-url]]
             [config.core :refer [reload-env]]
-            [integrant-repl-autoreload.core :as igr-auto]
+            [integrant-repl-autoreload.core :refer [start-auto-reset]]
             [integrant.repl :refer [go halt reset set-prep!]]
             [integrant.repl.state :refer [system]]
             [migratus.core :as migratus]))
@@ -17,7 +17,7 @@
   (reload-env)
   (reset)
   (halt)
-  (igr-auto/start-auto-reset)
+  (start-auto-reset)
   (browse-url "http://localhost:3000/api-docs"))
 
 (defn datasource []
