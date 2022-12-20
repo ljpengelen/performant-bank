@@ -1,33 +1,22 @@
 (ns bank.routes
-  (:require [bank.handlers :as h]
+  (:require [bank.async :refer [<??]]
+            [bank.handlers :as h]
             [jsonista.core :refer [keyword-keys-object-mapper read-value
                                    write-value-as-string]]
-            [org.httpkit.server :refer [as-channel send!]]
             [reitit.coercion.spec]
             [reitit.ring :as ring]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.params :refer [wrap-params]]))
-
-(defn respond-async [channel]
-  (fn [response]
-    (send! channel response)))
-
-(defn raise-async [channel]
-  (fn [error]
-    (println error)
-    (send! channel {:status 500 :body "Internal server error"})))
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.util.response :as response]))
 
 (defn wrap-async [handler]
   (fn [request]
-    (as-channel
-     request
-     {:on-open (fn [channel]
-                 (handler
-                  request
-                  (respond-async channel)
-                  (raise-async channel)))})))
+     (try
+       (response/response (<?? (handler request)))
+       (catch Exception e
+         (response/response (ex-data e))))))
 
 (defn no-caching-response [response]
   (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))
@@ -39,15 +28,12 @@
     ([request respond raise]
      (handler request (comp respond no-caching-response) raise))))
 
-(defn inject-request [request key dependency]
-  (assoc request key dependency))
-
-(defn wrap-inject [handler key dependency]
+(defn wrap-config [handler config]
   (fn
     ([request]
-     (handler (inject-request request key dependency)))
+     (handler config request))
     ([request respond raise]
-     (handler (inject-request request key dependency) respond raise))))
+     (handler config request respond raise))))
 
 (defn json-request [{:keys [body] :as request}]
   (assoc request :body (read-value body keyword-keys-object-mapper)))
@@ -71,7 +57,7 @@
     ([request respond raise]
      (handler request (comp respond json-response) raise))))
 
-(defn app [{:keys [datasource]}]
+(defn app [config]
   (ring/ring-handler
    (ring/router
     [["/account"
@@ -122,13 +108,13 @@
                              :swagger {:info {:title "Bank account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
     {:data {:coercion reitit.coercion.spec/coercion
-            :middleware [wrap-async
-                         [wrap-inject :datasource datasource]
+            :middleware [wrap-no-caching
                          wrap-params
                          wrap-keyword-params
                          wrap-json-request
                          wrap-json-response
-                         wrap-no-caching]}})
+                         wrap-async
+                         [wrap-config config]]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api-docs"})
