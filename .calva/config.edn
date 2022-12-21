@@ -7,6 +7,10 @@
    :snippet (browse-url "http://localhost:3000/api-docs")
    :ns "user"
    :key "b"}
+  {:name "Reload configuration"
+   :snippet (reload-env)
+   :ns "user"
+   :key "c"}
   {:name "Restart app"
    :snippet (reset)
    :ns "user"
