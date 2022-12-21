@@ -105,7 +105,7 @@
                                    :credit int?
                                    :description string?}}}]]]
      ["/swagger.json" {:get {:no-doc true
-                             :swagger {:info {:title "Bank account management API"}}
+                             :swagger {:info {:title "Bank-account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
     {:data {:coercion reitit.coercion.spec/coercion
             :middleware [wrap-no-caching
