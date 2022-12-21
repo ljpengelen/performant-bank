@@ -45,13 +45,13 @@
                      :migration-dir migration-dir
                      :db {:datasource datasource}}))
 
-(defmethod ig/init-key ::server [_ {:keys [handler port server-type]}]
+(defmethod ig/init-key ::server [_ {:keys [async? handler port server-type]}]
   (case server-type
     :http-kit (http-kit/run-server handler {:port port
                                             :join? false})
     (:jetty-async :jetty-sync) (let [server (run-jetty handler {:port port
                                                                 :join? false
-                                                                :async? false})]
+                                                                :async? async?})]
                                  (fn [] (.stop server)))
     (throw (ex-info "Invalid configuration: unknown server type" {:server-type server-type}))))
 

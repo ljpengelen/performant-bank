@@ -1,6 +1,7 @@
 (ns bank.routes
-  (:require [bank.async :refer [<??]]
+  (:require [bank.async :refer [<? <??]]
             [bank.handlers :as h]
+            [clojure.core.async :refer [chan go put!]]
             [jsonista.core :refer [keyword-keys-object-mapper read-value
                                    write-value-as-string]]
             [reitit.coercion.spec]
@@ -11,12 +12,22 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.util.response :as response]))
 
+(defn async-response [handler-chan]
+  (let [response-chan (chan)]
+    (go
+      (try
+        (put! response-chan (response/response (<? handler-chan)))
+        (catch Exception e
+          (put! response-chan (response/response (ex-data e))))))
+    response-chan))
+
 (defn wrap-async [handler]
-  (fn [request]
-     (try
-       (response/response (<?? (handler request)))
-       (catch Exception e
-         (response/response (ex-data e))))))
+  (fn
+    ([request]
+     (<?? (async-response (handler request))))
+    ([request respond _raise]
+     (go
+       (respond (<? (async-response (handler request))))))))
 
 (defn no-caching-response [response]
   (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))
