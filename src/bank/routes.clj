@@ -35,8 +35,10 @@
     ([request respond raise]
      (handler config request respond raise))))
 
-(defn json-request [{:keys [body] :as request}]
-  (assoc request :body (read-value body keyword-keys-object-mapper)))
+(defn json-request [{:keys [body request-method] :as request}]
+  (if (#{:get} request-method)
+    request
+    (assoc request :body (read-value body keyword-keys-object-mapper))))
 
 (defn wrap-json-request [handler]
   (fn
