@@ -60,7 +60,8 @@
 (defn app [config]
   (ring/ring-handler
    (ring/router
-    [["/account"
+    [["/account" {:middleware [wrap-async
+                               [wrap-config config]]}
       ["" {:post {:handler h/create-account!
                   :parameters {:body {:name string?}}
                   :summary "Create a new bank account."
@@ -112,9 +113,7 @@
                          wrap-params
                          wrap-keyword-params
                          wrap-json-request
-                         wrap-json-response
-                         wrap-async
-                         [wrap-config config]]}})
+                         wrap-json-response]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api-docs"})
