@@ -16,6 +16,8 @@
   ;; Jetty async - Execution time mean : 1,148571 ms
   ;; Jetty 11 sync - Execution time mean : 1,532254 ms
   ;; Jetty 11 async - Execution time mean : 1,893996 ms
+  ;; Undertow sync - Execution time mean : 1,523187 ms
+  ;; Undertow async - Execution time mean : 1,212966 ms
   (quick-bench (http-request :post "account" "{\"name\": \"Benchmark\"}"))
 
   ;; http-kit - Execution time mean : 277,740135 µs
@@ -23,6 +25,8 @@
   ;; Jetty async - Execution time mean : 221,346009 µs
   ;; Jetty 11 sync - Execution time mean : 265,358132 µs
   ;; Jetty 11 async - Execution time mean : 354,104871 µs
+  ;; Undertow sync - Execution time mean : 292,150503 µs
+  ;; Undertow async - Execution time mean : 311,363837 µs
   (quick-bench (http-request :get "account/1"))
 
   ;; http-kit - Execution time mean : 1,477777 ms
@@ -30,6 +34,8 @@
   ;; Jetty async - Execution time mean : 998,309678 µs
   ;; Jetty 11 sync - Execution time mean : 2,540063 ms
   ;; Jetty 11 async - Execution time mean : 1,557065 ms
+  ;; Undertow sync - Execution time mean : 1,137721 ms
+  ;; Undertow async - Execution time mean : 1,088912 ms
   (quick-bench (http-request :post "account/1/deposit" "{\"amount\": 10}"))
 
   ;; http-kit - Execution time mean : 1,431105 ms
@@ -37,6 +43,8 @@
   ;; Jetty async - Execution time mean : 1,303762 ms
   ;; Jetty 11 sync - Execution time mean : 1,396568 ms
   ;; Jetty 11 async - Execution time mean : 2,082553 ms
+  ;; Undertow sync - Execution time mean : 1,053164 ms
+  ;; Undertow async - Execution time mean : 1,103646 ms
   (quick-bench (http-request :post "account/1/withdraw" "{\"amount\": 1}"))
 
   ;; http-kit - Execution time mean : 1,733032 ms
@@ -44,6 +52,8 @@
   ;; Jetty async - Execution time mean : 1,130116 ms
   ;; Jetty 11 sync - Execution time mean : 1,543914 ms
   ;; Jetty 11 async - Execution time mean : 1,679548 ms
+  ;; Undertow sync - Execution time mean : 1,577193 ms
+  ;; Undertow async - Execution time mean : 1,167494 ms
   (quick-bench (http-request :post "account/1/send" "{\"account-number\": 2, \"amount\": 1}"))
 
   ;; http-kit - Execution time mean : 2,442319 ms
@@ -51,4 +61,6 @@
   ;; Jetty async - Execution time mean : 3,318397 ms
   ;; Jetty 11 sync - Execution time mean : 3,338426 ms
   ;; Jetty 11 async - Execution time mean : 6,899944 ms
+  ;; Undertow sync - Execution time mean : 9,757619 ms
+  ;; Undertow async - Execution time mean : 12,900340 ms
   (quick-bench (http-request :get "account/3/audit")))

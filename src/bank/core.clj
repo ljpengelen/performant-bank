@@ -6,12 +6,13 @@
             [integrant.core :as ig]
             [migratus.core :as migratus]
             [org.httpkit.server :as http-kit]
-            [ring.adapter.jetty9 :refer [run-jetty]])
+            [ring.adapter.jetty9 :refer [run-jetty]]
+            [ring.adapter.undertow :refer [run-undertow]])
   (:gen-class))
 
 (def system-config
   (let [server-type (:server-type env)
-        async? (contains? #{:jetty-async} server-type)]
+        async? (contains? #{:jetty-async :undertow-async} server-type)]
     {::datasource (get-in env [:db-config (:db env)])
      ::db-fns nil
      ::handler {:async? async?
@@ -54,6 +55,9 @@
                                                                 :join? false
                                                                 :async? async?})]
                                  (fn [] (.stop server)))
+    (:undertow-async :undertow-sync) (let [server (run-undertow handler {:port port
+                                                                         :async? async?})]
+                                       (fn [] (.stop server)))
     (throw (ex-info "Invalid configuration: unknown server type" {:server-type server-type}))))
 
 (defmethod ig/halt-key! ::server [_ stop-server]
