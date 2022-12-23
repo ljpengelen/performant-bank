@@ -18,7 +18,7 @@
   (reload-env)
   (reset)
   (halt)
-  (start-auto-reset)
+  (start-auto-reset {:paths ["src" "resources" "dev"]})
   (stop-auto-reset)
   (browse-url "http://localhost:3000/api-docs"))
 
