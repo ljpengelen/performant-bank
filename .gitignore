@@ -1,6 +1,7 @@
 .calva/*
 !.calva/config.edn
-.clj-kondo
+.clj-kondo/*
+!.clj-kondo/config.edn
 .cpcache
 .lsp
 .nrepl-port
