@@ -6,12 +6,12 @@
             [integrant.core :as ig]
             [migratus.core :as migratus]
             [org.httpkit.server :as http-kit]
-            [ring.adapter.jetty :refer [run-jetty]])
+            [ring.adapter.jetty9 :refer [run-jetty]])
   (:gen-class))
 
 (def system-config
   (let [server-type (:server-type env)
-        async? (= server-type :jetty-async)]
+        async? (contains? #{:jetty-async} server-type)]
     {::datasource (get-in env [:db-config (:db env)])
      ::db-fns nil
      ::handler {:async? async?
@@ -46,6 +46,7 @@
                      :db {:datasource datasource}}))
 
 (defmethod ig/init-key ::server [_ {:keys [async? handler port server-type]}]
+  (println "Starting server " server-type " - async: " async?)
   (case server-type
     :http-kit (http-kit/run-server handler {:port port
                                             :join? false})
