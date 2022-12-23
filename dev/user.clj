@@ -1,7 +1,7 @@
 (ns user
   (:require [bank.core :refer [system-config]]
             [bank.db :as db]
-            [bank.handlers :as h]
+            [bank.domain :as domain]
             [clojure.core.async :refer [<!!]]
             [clojure.java.browse :refer [browse-url]]
             [config.core :refer [reload-env]]
@@ -31,16 +31,16 @@
   account-a
   account-b
   
-  (def account-c (<!! (h/create-account-chan (datasource) "Jan Wolkers")))
-  (def account-d (<!! (h/create-account-chan (datasource) "Herman Brusselmans")))
+  (def account-c (<!! (domain/create-account! (datasource) "Jan Wolkers")))
+  (def account-d (<!! (domain/create-account! (datasource) "Herman Brusselmans")))
   account-c
   account-d
   
-  (<!! (h/get-account-chan (datasource) (:account-number account-c)))
-  (<!! (h/get-account-chan (datasource) (:account-number account-d)))
-  (<!! (h/post-deposit-chan (datasource) (:account-number account-c) 100))
-  (<!! (h/make-withdrawal-chan (datasource) (:account-number account-c) 100))
-  (<!! (h/make-transfer-chan (datasource) (:account-number account-c) (:account-number account-d) 50))
+  (<!! (domain/get-account (datasource) (:account-number account-c)))
+  (<!! (domain/get-account (datasource) (:account-number account-d)))
+  (<!! (domain/post-deposit! (datasource) (:account-number account-c) 100))
+  (<!! (domain/make-withdrawal! (datasource) (:account-number account-c) 100))
+  (<!! (domain/make-transfer! (datasource) (:account-number account-c) (:account-number account-d) 50))
   
   (db/persist-transaction! (datasource) {:credit-account-number 154260
                                          :debit-account-number 2
