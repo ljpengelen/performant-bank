@@ -8,4 +8,4 @@
                         :maximum-pool-size 10
                         :migration-dir "migrations/postgres"}}
  :port 3000
- :server-type :undertow-async}
+ :server-type :http-kit}
