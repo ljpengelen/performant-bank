@@ -27,6 +27,21 @@ Starting the application like this doesn't require Clojure, only Java.
 
 Execute `bin/kaocha --watch` to run tests continuously.
 
+## Using a different server
+
+By default, this app is configured to use [http-kit](https://github.com/http-kit/http-kit).
+By changing the server type in `resources/config.edn`, you can run the app using a different web server.
+
+| Server type     | Web server | Arity of handler function |
+|-----------------|------------|---------------------------|
+| :http-kit       | http-kit   | 1                         |
+| :jetty-sync     | Jetty      | 1                         |
+| :jetty-async    | Jetty      | 3                         |
+| :undertow-sync  | Undertow   | 1                         |
+| :undertow-async | Undertow   | 3                         |
+
+Running the app using Jetty requires the profile `:jetty9` or `:jetty11` to be active.
+
 ## Some remarks
 
 * For now, I'm ignoring the fact that one of the general requirements is that the API should service 1000 concurrent requests per seconds *asynchronously*.
