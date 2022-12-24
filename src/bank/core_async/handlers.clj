@@ -1,5 +1,5 @@
-(ns bank.handlers 
-  (:require [bank.domain :as domain]))
+(ns bank.core-async.handlers 
+  (:require [bank.core-async.domain :as domain]))
 
 (defn create-account! [{:keys [datasource]} request]
   (let [name (-> request :body :name)]

@@ -1,4 +1,4 @@
-(ns bank.domain
+(ns bank.core-async.domain
   (:require [bank.async :refer [<? with-channel]]
             [bank.db :as db]
             [clojure.core.async :refer [put!] :as async]

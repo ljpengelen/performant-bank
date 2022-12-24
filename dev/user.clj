@@ -1,7 +1,7 @@
 (ns user
   (:require [bank.core :refer [system-config]]
+            [bank.core-async.domain :as domain]
             [bank.db :as db]
-            [bank.domain :as domain]
             [clojure.core.async :refer [<!!]]
             [clojure.java.browse :refer [browse-url]]
             [config.core :refer [reload-env]]
