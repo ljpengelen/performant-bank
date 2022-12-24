@@ -2,13 +2,22 @@
   (:require [bank.db :as db]
             [next.jdbc :refer [with-transaction]]))
 
+(defprotocol Bank
+  (create-account! [this datasource name])
+  (get-account [this datasource account-number])
+  (post-deposit! [this datasource account-number amount])
+  (make-withdrawal! [this datasource account-number amount])
+  (make-transfer! [this datasource credit-account-number debit-account-number amount])
+  (get-transactions [this datasource account-number])
+  (audit-log [this datasource account-number]))
+
 (defn valid-amount [amount]
   (if (<= amount 0)
     (throw (ex-info "Invalid amount" {:status 400
                                       :body {:message "Amount must be positive"}}))
     amount))
 
-(defn make-transaction! [datasource credit-account-number debit-account-number amount]
+(defn persist-transaction! [datasource credit-account-number debit-account-number amount]
   (with-transaction [tx datasource]
     (let [updated-credit-account (when credit-account-number
                                    (db/update-balance! tx {:account-number credit-account-number

@@ -1,6 +1,6 @@
 (ns bank.routes
-  (:require [bank.core-async.handlers :as h]
-            [bank.core-async.macros :refer [<? <??]]
+  (:require [bank.core-async.macros :refer [<? <??]]
+            [bank.handlers :as h]
             [clojure.core.async :refer [chan go put!]]
             [jsonista.core :refer [keyword-keys-object-mapper read-value
                                    write-value-as-string]]

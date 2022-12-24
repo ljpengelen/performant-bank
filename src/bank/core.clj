@@ -1,5 +1,6 @@
 (ns bank.core
-  (:require [bank.db :as db]
+  (:require [bank.core-async.domain :as domain]
+            [bank.db :as db]
             [bank.routes :refer [app]]
             [config.core :refer [env]]
             [hikari-cp.core :as hcp]
@@ -12,9 +13,11 @@
 (defn system-config []
   (let [server-type (:server-type env)
         async? (contains? #{:jetty-async :undertow-async} server-type)]
-    {::datasource (get-in env [:db-config (:db env)])
+    {::bank nil
+     ::datasource (get-in env [:db-config (:db env)])
      ::db-fns nil
      ::handler {:async? async?
+                :bank (ig/ref ::bank)
                 :datasource (ig/ref ::datasource)}
      ::migrations {:datasource (ig/ref ::datasource)
                    :migration-dir (get-in env [:db-config (:db env) :migration-dir])}
@@ -24,6 +27,9 @@
                :migrations (ig/ref ::migrations)
                :port (:port env)
                :server-type server-type}}))
+
+(defmethod ig/init-key ::bank [_ _]
+  domain/bank)
 
 (defmethod ig/init-key ::datasource [_ {:keys [jdbc-url username password maximum-pool-size]}]
   (hcp/make-datasource {:jdbc-url jdbc-url
