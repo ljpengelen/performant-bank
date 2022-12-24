@@ -11,7 +11,9 @@
             [integrant.repl.state :refer [system]]
             [migratus.core :as migratus]))
 
-(set-prep! (constantly system-config))
+(set-prep! (fn []
+             (reload-env)
+             (system-config)))
 
 (comment
   (go)

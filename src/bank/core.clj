@@ -10,7 +10,7 @@
             [ring.adapter.undertow :refer [run-undertow]])
   (:gen-class))
 
-(def system-config
+(defn system-config []
   (let [server-type (:server-type env)
         async? (contains? #{:jetty-async :undertow-async} server-type)]
     {::datasource (get-in env [:db-config (:db env)])
@@ -64,4 +64,4 @@
   (stop-server))
 
 (defn -main [& _]
-  (ig/init system-config))
+  (ig/init (system-config)))
