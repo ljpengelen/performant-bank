@@ -1,6 +1,9 @@
 (ns bank.core
-  (:require [bank.core-async.domain :as domain]
+  (:require [bank.core-async.domain :as core-async-domain]
+            [bank.core-async.middleware :as core-async-middleware]
             [bank.db :as db]
+            [bank.manifold.domain :as manifold-domain]
+            [bank.manifold.middleware :as manifold-middleware]
             [bank.routes :refer [app]]
             [config.core :refer [env]]
             [hikari-cp.core :as hcp]
@@ -10,14 +13,28 @@
             [ring.adapter.undertow :refer [run-undertow]])
   (:gen-class))
 
+(defn wrap-async [async-implementation]
+  (println "Using middleware " async-implementation)
+  (case async-implementation
+    :core-async core-async-middleware/wrap-async
+    :manifold manifold-middleware/wrap-async
+    (throw (ex-info "Invalid configuration: unknown async implementation" {:async-implementation async-implementation}))))
+
+(defn bank [async-implementation]
+  (println "Using bank " async-implementation)
+  (case async-implementation
+    :core-async core-async-domain/bank
+    :manifold manifold-domain/bank
+    (throw (ex-info "Invalid configuration: unknown async implementation" {:async-implementation async-implementation}))))
+
 (defn system-config []
-  (let [server-type (:server-type env)
+  (let [async-implementation (:async-implementation env)
+        server-type (:server-type env)
         async? (contains? #{:jetty-async :undertow-async} server-type)]
-    {::bank nil
-     ::datasource (get-in env [:db-config (:db env)])
+    {::datasource (get-in env [:db-config (:db env)])
      ::db-fns nil
-     ::handler {:async? async?
-                :bank (ig/ref ::bank)
+     ::handler {:wrap-async (wrap-async async-implementation)
+                :bank (bank async-implementation)
                 :datasource (ig/ref ::datasource)}
      ::migrations {:datasource (ig/ref ::datasource)
                    :migration-dir (get-in env [:db-config (:db env) :migration-dir])}
@@ -27,9 +44,6 @@
                :migrations (ig/ref ::migrations)
                :port (:port env)
                :server-type server-type}}))
-
-(defmethod ig/init-key ::bank [_ _]
-  domain/bank)
 
 (defmethod ig/init-key ::datasource [_ {:keys [jdbc-url username password maximum-pool-size]}]
   (hcp/make-datasource {:jdbc-url jdbc-url
@@ -64,7 +78,7 @@
     (throw (RuntimeException. "Invalid configuration: no Jetty adapter on classpath"))))
 
 (defmethod ig/init-key ::server [_ {:keys [async? handler port server-type]}]
-  (println "Starting server " server-type " - async: " async?)
+  (println "Starting server " server-type)
   (case server-type
     :http-kit (http-kit/run-server handler {:port port
                                             :join? false})
