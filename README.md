@@ -40,6 +40,7 @@ Execute `bin/kaocha --watch` to run tests continuously.
 
 By default, this app is configured to use [http-kit](https://github.com/http-kit/http-kit).
 By changing the server type in `resources/config.edn`, you can run the app using a different web server.
+When running the app from the command line, you can also use the environment variable `SERVER_TYPE` to select a web server.
 
 | Server type     | Web server | Arity of handler function |
 |-----------------|------------|---------------------------|
@@ -49,4 +50,7 @@ By changing the server type in `resources/config.edn`, you can run the app using
 | :undertow-sync  | Undertow   | 1                         |
 | :undertow-async | Undertow   | 3                         |
 
-Running the app using Jetty requires the profile `:jetty9` or `:jetty11` to be active.
+Running the app using Jetty requires the alias `:jetty9` or `:jetty11` to be active.
+On the command line, start the app using Jetty 9 and a single-arity handler by executing `SERVER_TYPE=:jetty-sync clojure -X:jetty9:run`.
+You need to take this into account when building a JAR too, if you want to build a JAR that supports either version of Jetty.
+For example, execute `clojure -T:build clean && clojure -T:build uber :aliases "(:jetty9)"` to create an uberjar that supports Jetty 9.
