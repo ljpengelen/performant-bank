@@ -1,28 +1,80 @@
 (ns bank.routes
-  (:require [bank.handlers :as h]
-            [muuntaja.core :as m]
+  (:require [bank.async :refer [<? <??]]
+            [bank.handlers :as h]
+            [clojure.core.async :refer [chan go put!]]
+            [jsonista.core :refer [keyword-keys-object-mapper read-value
+                                   write-value-as-string]]
             [reitit.coercion.spec]
             [reitit.ring :as ring]
-            [reitit.ring.coercion :as coercion]
-            [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.util.response :as response]))
 
-(defn no-caching [handler]
-  (fn [request]
-    (let [response (handler request)]
-      (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))))
+(defn async-response [handler-chan]
+  (let [response-chan (chan)]
+    (go
+      (try
+        (put! response-chan (response/response (<? handler-chan)))
+        (catch Exception e
+          (put! response-chan (response/response (ex-data e))))))
+    response-chan))
 
-(defn inject [handler key dependency]
-  (fn [request]
-    (handler (assoc request key dependency))))
+(defn wrap-async [handler]
+  (fn
+    ([request]
+     (<?? (async-response (handler request))))
+    ([request respond _raise]
+     (go
+       (respond (<? (async-response (handler request))))))))
 
-(defn app [datasource]
+(defn no-caching-response [response]
+  (assoc-in response [:headers "Cache-Control"] "no-cache, no-store"))
+
+(defn wrap-no-caching [handler]
+  (fn
+    ([request]
+     (no-caching-response (handler request)))
+    ([request respond raise]
+     (handler request (comp respond no-caching-response) raise))))
+
+(defn wrap-config [handler config]
+  (fn
+    ([request]
+     (handler config request))
+    ([request respond raise]
+     (handler config request respond raise))))
+
+(defn json-request [{:keys [body request-method] :as request}]
+  (if (#{:get} request-method)
+    request
+    (assoc request :body (read-value body keyword-keys-object-mapper))))
+
+(defn wrap-json-request [handler]
+  (fn
+    ([request]
+     (handler (json-request request)))
+    ([request respond raise]
+     (handler (json-request request) respond raise))))
+
+(defn json-response [response]
+  (-> response
+      (assoc :body (write-value-as-string (:body response)))
+      (update :headers assoc "Content-type" "application/json")))
+
+(defn wrap-json-response [handler]
+  (fn
+    ([request]
+     (json-response (handler request)))
+    ([request respond raise]
+     (handler request (comp respond json-response) raise))))
+
+(defn app [config]
   (ring/ring-handler
    (ring/router
-    [["/account"
+    [["/account" {:middleware [wrap-async
+                               [wrap-config config]]}
       ["" {:post {:handler h/create-account!
                   :parameters {:body {:name string?}}
                   :summary "Create a new bank account."
@@ -67,19 +119,14 @@
                                    :credit int?
                                    :description string?}}}]]]
      ["/swagger.json" {:get {:no-doc true
-                             :swagger {:info {:title "Bank account management API"}}
+                             :swagger {:info {:title "Bank-account management API"}}
                              :handler (swagger/create-swagger-handler)}}]]
     {:data {:coercion reitit.coercion.spec/coercion
-            :middleware [[inject :datasource datasource]
+            :middleware [wrap-no-caching
                          wrap-params
                          wrap-keyword-params
-                         muuntaja/format-negotiate-middleware
-                         muuntaja/format-response-middleware
-                         muuntaja/format-request-middleware
-                         coercion/coerce-response-middleware
-                         coercion/coerce-request-middleware
-                         no-caching]
-            :muuntaja m/instance}})
+                         wrap-json-request
+                         wrap-json-response]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api-docs"})

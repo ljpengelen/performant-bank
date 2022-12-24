@@ -1,0 +1,25 @@
+{:customREPLCommandSnippets
+ [{:name "Start app"
+   :snippet (go)
+   :ns "user"
+   :key "s"}
+  {:name "Open app in browser"
+   :snippet (browse-url "http://localhost:3000/api-docs")
+   :ns "user"
+   :key "b"}
+  {:name "Reload configuration"
+   :snippet (reload-env)
+   :ns "user"
+   :key "c"}
+  {:name "Restart app"
+   :snippet (reset)
+   :ns "user"
+   :key "r"}
+  {:name "Automatically restart app"
+   :snippet (start-auto-reset {:relevant-file? (constantly true)})
+   :ns "user"
+   :key "a"}
+  {:name "Stop app"
+   :snippet (halt)
+   :ns "user"
+   :key "h"}]}

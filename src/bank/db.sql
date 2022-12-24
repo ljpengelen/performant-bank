@@ -11,6 +11,14 @@ set balance = :balance
 where account_number = :account-number
 returning account_number "account-number", name, balance
 
+-- :name update-balance! :<! :1
+-- :doc Add an amount to the balance of an account and return the account
+update account
+set balance = balance + :amount
+where balance + :amount >= 0 and
+    account_number = :account-number
+returning account_number "account-number", name, balance
+
 -- :name get-account :? :1
 -- :doc Get account by its number
 select account_number "account-number", name, balance

@@ -52,6 +52,15 @@
   (withdraw! {:accounts {1 10}})
   (transfer! {:accounts {1 10
                          2 0}})
+  
+  ;; http-kit - mean requests/sec: 909.273 / 1000.4 / 1000.4
+  ;; Jetty sync - mean requests/sec: 588.294 / 833.667 / 1000.5
+  ;; Jetty async - mean requests/sec: 833.417 / 1000.1 / 1000.1
+  ;; Jetty 11 sync - mean requests/sec: 833.583 / 909.636 / 833.583
+  ;; Jetty 11 async - mean requests/sec: 909.636 / 909.273
+  ;; Undertow sync - mean requests/sec: 1000.1
+  ;; Undertow async - mean requests/sec: 1000.1
+  
   (clj-gatling/run
    {:name "Load test"
     :scenarios [{:name "Create and view account"

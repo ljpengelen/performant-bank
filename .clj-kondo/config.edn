@@ -1,0 +1,1 @@
+{:lint-as {bank.async/with-channel clj-kondo.lint-as/def-catch-all}}
