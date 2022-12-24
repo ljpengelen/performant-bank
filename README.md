@@ -1,10 +1,19 @@
 # Bank
 
 An HTTP API for managing bank accounts.
+You can configure this app to use a number of different web servers.
+This makes it possible to perform performance tests for each of these servers using the exact same business logic.
+
+At the moment, the following web servers are supported:
+
+* [http-kit](https://github.com/http-kit/http-kit)
+* [undertow](https://undertow.io/), via [ring-undertow-adapter](https://github.com/luminus-framework/ring-undertow-adapter)
+* [Jetty 9](https://www.eclipse.org/jetty/), via [ring-jetty-adapter](https://github.com/ring-clojure/ring)
+* [Jetty 11](https://www.eclipse.org/jetty/), via [ring-jetty9-adapter](https://github.com/sunng87/ring-jetty9-adapter)
 
 ## Requirements
 
-* [Java 8+](https://adoptium.net/)
+* [Java 11+](https://adoptium.net/)
 * [Clojure](https://clojure.org/)
 
 ## Development
