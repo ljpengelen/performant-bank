@@ -56,11 +56,11 @@
   ;; Undertow async - Execution time mean : 1,167494 ms
   (quick-bench (http-request :post "account/1/send" "{\"account-number\": 2, \"amount\": 1}"))
 
-  ;; http-kit - Execution time mean : 2,442319 ms
-  ;; Jetty sync - Execution time mean : 6,679884 ms
-  ;; Jetty async - Execution time mean : 3,318397 ms
-  ;; Jetty 11 sync - Execution time mean : 3,338426 ms
-  ;; Jetty 11 async - Execution time mean : 6,899944 ms
-  ;; Undertow sync - Execution time mean : 9,757619 ms
-  ;; Undertow async - Execution time mean : 12,900340 ms
+  ;; http-kit - Execution time mean : 271,686171 µs
+  ;; Jetty sync - Execution time mean : 
+  ;; Jetty async - Execution time mean : 
+  ;; Jetty 11 sync - Execution time mean : 
+  ;; Jetty 11 async - Execution time mean : 
+  ;; Undertow sync - Execution time mean : 268,216806 µs
+  ;; Undertow async - Execution time mean : 283,994430 µs
   (quick-bench (http-request :get "account/3/audit")))

@@ -1,4 +1,4 @@
-(ns bank.async
+(ns bank.core-async.macros
   (:require [clojure.core.async :as async]))
 
 (defn throw-err [v]

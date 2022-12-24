@@ -11,6 +11,13 @@ At the moment, the following web servers are supported:
 * [Jetty 9](https://www.eclipse.org/jetty/), via [ring-jetty-adapter](https://github.com/ring-clojure/ring)
 * [Jetty 11](https://www.eclipse.org/jetty/), via [ring-jetty9-adapter](https://github.com/sunng87/ring-jetty9-adapter)
 
+It's also possible to change the asynchronous library used to implement the business logic.
+
+At the moment, the following libraries are supported:
+
+* [Manifold](https://github.com/clj-commons/manifold)
+* [core.async](https://github.com/clojure/core.async)
+
 ## Requirements
 
 * [Java 11+](https://adoptium.net/)
@@ -41,6 +48,8 @@ Execute `bin/kaocha --watch` to run tests continuously.
 By default, this app is configured to use [http-kit](https://github.com/http-kit/http-kit).
 By changing the server type in `resources/config.edn`, you can run the app using a different web server.
 When running the app from the command line, you can also use the environment variable `SERVER_TYPE` to select a web server.
+
+The following keywords can be used to select a server:
 
 | Server type     | Web server | Arity of handler function |
 |-----------------|------------|---------------------------|

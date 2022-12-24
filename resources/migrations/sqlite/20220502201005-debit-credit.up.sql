@@ -1,5 +1,3 @@
-drop table if exists "transaction"
---;;
 create table "transaction" (
     transaction_number integer primary key,
     credit_account_number integer,

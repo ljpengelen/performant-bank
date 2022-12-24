@@ -9,6 +9,7 @@
         http-kit/http-kit {:mvn/version "2.5.3"}
         integrant/integrant {:mvn/version "0.8.0"}
         luminus/ring-undertow-adapter {:mvn/version "1.3.0"}
+        manifold/manifold {:mvn/version "0.3.0"}
         metosin/reitit-ring {:mvn/version "0.5.15"}
         metosin/reitit-spec {:mvn/version "0.5.15"}
         metosin/reitit-middleware {:mvn/version "0.5.15"}

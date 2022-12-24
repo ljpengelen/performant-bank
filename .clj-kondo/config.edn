@@ -1,1 +1,2 @@
-{:lint-as {bank.async/with-channel clj-kondo.lint-as/def-catch-all}}
+{:lint-as {bank.core-async.macros/with-channel clj-kondo.lint-as/def-catch-all
+           manifold.deferred/let-flow clojure.core/let}}
