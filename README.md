@@ -18,7 +18,7 @@ A convenient way to get started is opening `dev/user.clj` and evaluating express
 ## Running the app
 
 Run `clojure -X:run` to start the app.
-Obviously, this requires Clojure.
+Clearly, this requires Clojure.
 
 Alternatively, run `clojure -T:build clean && clojure -T:build uber` to create an uberjar, followed by `java -jar target/bank-<version>-standalone.jar` to start the application.
 Starting the application like this doesn't require Clojure, only Java.
