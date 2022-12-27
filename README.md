@@ -42,7 +42,7 @@ Starting the application like this doesn't require Clojure, only Java.
 
 ## Running tests
 
-Execute `bin/kaocha --watch` to run tests continuously.
+Execute `clojure -M:test --watch` to run tests continuously.
 
 ## Using a different server
 
