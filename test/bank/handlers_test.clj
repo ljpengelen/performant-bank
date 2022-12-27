@@ -1,5 +1,5 @@
 (ns bank.handlers-test
-  (:require [bank.handlers :refer [make-log-entry]]
+  (:require [bank.domain :refer [make-log-entry]]
             [clojure.test :refer [deftest is testing]]))
 
 (deftest make-log-entry-test
