@@ -60,6 +60,7 @@
   ;; Jetty 11 async - mean requests/sec: 909.636 / 909.273
   ;; Undertow sync - mean requests/sec: 1000.1
   ;; Undertow async - mean requests/sec: 1000.1
+  ;; aleph - mean requests/sec: 1000.2
   
   (clj-gatling/run
    {:name "Load test"

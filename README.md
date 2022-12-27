@@ -10,6 +10,7 @@ At the moment, the following web servers are supported:
 * [undertow](https://undertow.io/), via [ring-undertow-adapter](https://github.com/luminus-framework/ring-undertow-adapter)
 * [Jetty 9](https://www.eclipse.org/jetty/), via [ring-jetty-adapter](https://github.com/ring-clojure/ring)
 * [Jetty 11](https://www.eclipse.org/jetty/), via [ring-jetty9-adapter](https://github.com/sunng87/ring-jetty9-adapter)
+* [Aleph](https://github.com/clj-commons/aleph)
 
 It's also possible to change the asynchronous library used to implement the business logic.
 
@@ -58,6 +59,7 @@ The following keywords can be used to select a server:
 | :jetty-async    | Jetty      | 3                         |
 | :undertow-sync  | Undertow   | 1                         |
 | :undertow-async | Undertow   | 3                         |
+| :aleph          | Aleph      | 1                         |
 
 Running the app using Jetty requires the alias `:jetty9` or `:jetty11` to be active.
 On the command line, start the app using Jetty 9 and a single-arity handler by executing `SERVER_TYPE=:jetty-sync clojure -X:jetty9:run`.
