@@ -83,7 +83,8 @@
   (case server-type
     :aleph (let [server (aleph-http/start-server handler {:port port})]
              (fn [] (.close server)))
-    :http-kit (http-kit/run-server handler {:port port})
+    :http-kit (http-kit/run-server handler {:port port
+                                            :thread (* 2 (.availableProcessors (Runtime/getRuntime)))})
     (:jetty-async :jetty-sync) (let [server (run-jetty handler {:port port
                                                                 :join? false
                                                                 :async? async?})]
