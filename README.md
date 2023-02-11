@@ -62,6 +62,7 @@ The following keywords can be used to select a server:
 | :aleph          | Aleph      | 1                         |
 
 Running the app using Jetty requires the alias `:jetty9` or `:jetty11` to be active.
+Running the app using Aleph requires the alias `:aleph` to be active.
 On the command line, start the app using Jetty 9 and a single-arity handler by executing `SERVER_TYPE=:jetty-sync clojure -X:jetty9:run`.
-You need to take this into account when building a JAR too, if you want to build a JAR that supports either version of Jetty.
+You need to take this into account when building a JAR too, if you want to build a JAR that supports either version of Jetty or Aleph.
 For example, execute `clojure -T:build clean && clojure -T:build uber :aliases "(:jetty9)"` to create an uberjar that supports Jetty 9.
