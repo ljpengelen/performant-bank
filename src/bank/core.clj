@@ -1,6 +1,5 @@
 (ns bank.core
-  (:require [aleph.http.server :as aleph-http]
-            [bank.core-async.domain :as core-async-domain]
+  (:require [bank.core-async.domain :as core-async-domain]
             [bank.core-async.middleware :as core-async-middleware]
             [bank.db :as db]
             [bank.manifold.domain :as manifold-domain]
@@ -78,10 +77,15 @@
     (run-jetty handler options)
     (throw (RuntimeException. "Invalid configuration: no Jetty adapter on classpath"))))
 
+(defn start-aleph [handler options]
+  (if-let [start-aleph (try-requiring-resolve 'aleph.http.server/start-server)]
+    (start-aleph handler options)
+    (throw (RuntimeException. "Invalid configuration: Aleph not found on classpath"))))
+
 (defmethod ig/init-key ::server [_ {:keys [async? handler port server-type]}]
   (println "Starting server " server-type)
   (case server-type
-    :aleph (let [server (aleph-http/start-server handler {:port port})]
+    :aleph (let [server (start-aleph handler {:port port})]
              (fn [] (.close server)))
     :http-kit (http-kit/run-server handler {:port port
                                             :thread (* 2 (.availableProcessors (Runtime/getRuntime)))})

@@ -39,9 +39,6 @@
   "name":"[Ljava.lang.String;"
 },
 {
-  "name":"[Ljava.security.cert.X509Certificate;"
-},
-{
   "name":"[Ljava.sql.Statement;"
 },
 {
@@ -52,48 +49,6 @@
 },
 {
   "name":"[Z"
-},
-{
-  "name":"aleph.flow__init"
-},
-{
-  "name":"aleph.http.core.HeaderMap"
-},
-{
-  "name":"aleph.http.core.HttpFile"
-},
-{
-  "name":"aleph.http.core.ILookupNettyRequest"
-},
-{
-  "name":"aleph.http.core.ILookupNettyResponse"
-},
-{
-  "name":"aleph.http.core.NettyRequest"
-},
-{
-  "name":"aleph.http.core.NettyResponse"
-},
-{
-  "name":"aleph.http.core.WebsocketClose"
-},
-{
-  "name":"aleph.http.core.WebsocketPing"
-},
-{
-  "name":"aleph.http.core__init"
-},
-{
-  "name":"aleph.http.server__init"
-},
-{
-  "name":"aleph.netty.AlephServer"
-},
-{
-  "name":"aleph.netty.ChannelSink"
-},
-{
-  "name":"aleph.netty__init"
 },
 {
   "name":"bank.core__init"
@@ -194,86 +149,6 @@
 {
   "name":"ch.qos.logback.core.pattern.PatternLayoutEncoderBase",
   "methods":[{"name":"setPattern","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"clj_commons.byte_streams.ByteBufferInputStream"
-},
-{
-  "name":"clj_commons.byte_streams.InputStream"
-},
-{
-  "name":"clj_commons.byte_streams.InputStream$Streamable"
-},
-{
-  "name":"clj_commons.byte_streams.Utils"
-},
-{
-  "name":"clj_commons.byte_streams.char_sequence__init"
-},
-{
-  "name":"clj_commons.byte_streams.graph.Conversion"
-},
-{
-  "name":"clj_commons.byte_streams.graph.ConversionGraph"
-},
-{
-  "name":"clj_commons.byte_streams.graph.ConversionPath"
-},
-{
-  "name":"clj_commons.byte_streams.graph.IConversionGraph"
-},
-{
-  "name":"clj_commons.byte_streams.graph.Type"
-},
-{
-  "name":"clj_commons.byte_streams.graph__init"
-},
-{
-  "name":"clj_commons.byte_streams.protocols$fn__18213",
-  "queryAllPublicConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"clj_commons.byte_streams.protocols.ByteSink"
-},
-{
-  "name":"clj_commons.byte_streams.protocols.ByteSource"
-},
-{
-  "name":"clj_commons.byte_streams.protocols.Closeable"
-},
-{
-  "name":"clj_commons.byte_streams.protocols__init"
-},
-{
-  "name":"clj_commons.byte_streams.pushback_stream.Consumption"
-},
-{
-  "name":"clj_commons.byte_streams.pushback_stream.PushbackByteStream"
-},
-{
-  "name":"clj_commons.byte_streams.pushback_stream.PushbackStream"
-},
-{
-  "name":"clj_commons.byte_streams.pushback_stream.SynchronizedPushbackByteStream"
-},
-{
-  "name":"clj_commons.byte_streams.pushback_stream__init"
-},
-{
-  "name":"clj_commons.byte_streams.utils__init"
-},
-{
-  "name":"clj_commons.byte_streams__init"
-},
-{
-  "name":"clj_commons.primitive_math.Primitives"
-},
-{
-  "name":"clj_commons.primitive_math__init"
-},
-{
-  "name":"clj_tuple__init"
 },
 {
   "name":"clojure.asm.ClassReader"
@@ -953,12 +828,6 @@
   "name":"clojure.lang.PersistentTreeMap"
 },
 {
-  "name":"clojure.lang.PersistentUnrolledMap"
-},
-{
-  "name":"clojure.lang.PersistentUnrolledVector"
-},
-{
   "name":"clojure.lang.PersistentVector"
 },
 {
@@ -1321,7 +1190,7 @@
   "name":"hugsql.adapter__init"
 },
 {
-  "name":"hugsql.core$eval154",
+  "name":"hugsql.core$eval152",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1385,347 +1254,10 @@
   "name":"io.aleph.dirigiste.Executors"
 },
 {
-  "name":"io.aleph.dirigiste.IPool"
-},
-{
-  "name":"io.aleph.dirigiste.IPool$AcquireCallback"
-},
-{
-  "name":"io.aleph.dirigiste.IPool$Controller"
-},
-{
-  "name":"io.aleph.dirigiste.IPool$Generator"
-},
-{
-  "name":"io.aleph.dirigiste.Pool"
-},
-{
-  "name":"io.aleph.dirigiste.Pools"
-},
-{
   "name":"io.aleph.dirigiste.Stats"
 },
 {
   "name":"io.aleph.dirigiste.Stats$Metric"
-},
-{
-  "name":"io.netty.bootstrap.Bootstrap"
-},
-{
-  "name":"io.netty.bootstrap.ServerBootstrap"
-},
-{
-  "name":"io.netty.buffer.AbstractByteBufAllocator",
-  "queryAllDeclaredMethods":true
-},
-{
-  "name":"io.netty.buffer.ByteBuf"
-},
-{
-  "name":"io.netty.buffer.ByteBufHolder"
-},
-{
-  "name":"io.netty.buffer.Unpooled"
-},
-{
-  "name":"io.netty.channel.Channel"
-},
-{
-  "name":"io.netty.channel.ChannelFuture"
-},
-{
-  "name":"io.netty.channel.ChannelFutureListener"
-},
-{
-  "name":"io.netty.channel.ChannelHandler"
-},
-{
-  "name":"io.netty.channel.ChannelHandlerContext"
-},
-{
-  "name":"io.netty.channel.ChannelInboundHandler"
-},
-{
-  "name":"io.netty.channel.ChannelInitializer"
-},
-{
-  "name":"io.netty.channel.ChannelOption"
-},
-{
-  "name":"io.netty.channel.ChannelOutboundHandler"
-},
-{
-  "name":"io.netty.channel.ChannelPipeline"
-},
-{
-  "name":"io.netty.channel.DefaultFileRegion"
-},
-{
-  "name":"io.netty.channel.EventLoopGroup"
-},
-{
-  "name":"io.netty.channel.FileRegion"
-},
-{
-  "name":"io.netty.channel.epoll.Epoll"
-},
-{
-  "name":"io.netty.channel.epoll.EpollDatagramChannel"
-},
-{
-  "name":"io.netty.channel.epoll.EpollEventLoopGroup"
-},
-{
-  "name":"io.netty.channel.epoll.EpollServerSocketChannel"
-},
-{
-  "name":"io.netty.channel.epoll.EpollSocketChannel"
-},
-{
-  "name":"io.netty.channel.group.ChannelGroup"
-},
-{
-  "name":"io.netty.channel.group.DefaultChannelGroup"
-},
-{
-  "name":"io.netty.channel.nio.NioEventLoopGroup"
-},
-{
-  "name":"io.netty.channel.socket.ServerSocketChannel"
-},
-{
-  "name":"io.netty.channel.socket.nio.NioDatagramChannel"
-},
-{
-  "name":"io.netty.channel.socket.nio.NioServerSocketChannel"
-},
-{
-  "name":"io.netty.channel.socket.nio.NioSocketChannel"
-},
-{
-  "name":"io.netty.handler.codec.DecoderException"
-},
-{
-  "name":"io.netty.handler.codec.TooLongFrameException"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultFullHttpRequest"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultFullHttpResponse"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultHttpContent"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultHttpHeaders"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultHttpRequest"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultHttpResponse"
-},
-{
-  "name":"io.netty.handler.codec.http.DefaultLastHttpContent"
-},
-{
-  "name":"io.netty.handler.codec.http.FullHttpRequest"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpChunkedInput"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpContent"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpContentCompressor"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpHeaderNames"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpHeaders"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpMessage"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpMethod"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpRequest"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpResponse"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpResponseStatus"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpServerCodec"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpServerExpectContinueHandler"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpUtil"
-},
-{
-  "name":"io.netty.handler.codec.http.HttpVersion"
-},
-{
-  "name":"io.netty.handler.codec.http.LastHttpContent"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.CloseWebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.PingWebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.PongWebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.TextWebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.WebSocketChunkedInput"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.WebSocketFrame"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.WebSocketFrameAggregator"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory"
-},
-{
-  "name":"io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler"
-},
-{
-  "name":"io.netty.handler.logging.LogLevel"
-},
-{
-  "name":"io.netty.handler.logging.LoggingHandler"
-},
-{
-  "name":"io.netty.handler.ssl.ClientAuth"
-},
-{
-  "name":"io.netty.handler.ssl.SslContext"
-},
-{
-  "name":"io.netty.handler.ssl.SslContextBuilder"
-},
-{
-  "name":"io.netty.handler.ssl.SslHandler"
-},
-{
-  "name":"io.netty.handler.ssl.SslProvider"
-},
-{
-  "name":"io.netty.handler.ssl.util.InsecureTrustManagerFactory"
-},
-{
-  "name":"io.netty.handler.ssl.util.SelfSignedCertificate"
-},
-{
-  "name":"io.netty.handler.stream.ChunkedFile"
-},
-{
-  "name":"io.netty.handler.stream.ChunkedInput"
-},
-{
-  "name":"io.netty.handler.stream.ChunkedWriteHandler"
-},
-{
-  "name":"io.netty.handler.timeout.IdleState"
-},
-{
-  "name":"io.netty.handler.timeout.IdleStateEvent"
-},
-{
-  "name":"io.netty.handler.timeout.IdleStateHandler"
-},
-{
-  "name":"io.netty.resolver.AddressResolverGroup"
-},
-{
-  "name":"io.netty.resolver.NoopAddressResolverGroup"
-},
-{
-  "name":"io.netty.resolver.ResolvedAddressTypes"
-},
-{
-  "name":"io.netty.resolver.dns.DnsAddressResolverGroup"
-},
-{
-  "name":"io.netty.resolver.dns.DnsNameResolverBuilder"
-},
-{
-  "name":"io.netty.resolver.dns.DnsServerAddressStreamProvider"
-},
-{
-  "name":"io.netty.resolver.dns.SequentialDnsServerAddressStreamProvider"
-},
-{
-  "name":"io.netty.resolver.dns.SingletonDnsServerAddressStreamProvider"
-},
-{
-  "name":"io.netty.util.Attribute"
-},
-{
-  "name":"io.netty.util.AttributeKey"
-},
-{
-  "name":"io.netty.util.ResourceLeakDetector"
-},
-{
-  "name":"io.netty.util.ResourceLeakDetector$Level"
-},
-{
-  "name":"io.netty.util.concurrent.AbstractEventExecutor"
-},
-{
-  "name":"io.netty.util.concurrent.FastThreadLocal"
-},
-{
-  "name":"io.netty.util.concurrent.FastThreadLocalThread"
-},
-{
-  "name":"io.netty.util.concurrent.Future"
-},
-{
-  "name":"io.netty.util.concurrent.GenericFutureListener"
-},
-{
-  "name":"io.netty.util.concurrent.GlobalEventExecutor"
-},
-{
-  "name":"io.netty.util.internal.SystemPropertyUtil"
-},
-{
-  "name":"io.netty.util.internal.logging.InternalLoggerFactory"
-},
-{
-  "name":"io.netty.util.internal.logging.JdkLoggerFactory"
-},
-{
-  "name":"io.netty.util.internal.logging.Log4J2LoggerFactory"
-},
-{
-  "name":"io.netty.util.internal.logging.Log4JLoggerFactory"
-},
-{
-  "name":"io.netty.util.internal.logging.Slf4JLoggerFactory"
 },
 {
   "name":"io.undertow.Undertow"
@@ -1824,9 +1356,6 @@
   "name":"java.io.Closeable"
 },
 {
-  "name":"java.io.DataInputStream"
-},
-{
   "name":"java.io.DataOutput"
 },
 {
@@ -1875,9 +1404,6 @@
   "name":"java.io.PushbackReader"
 },
 {
-  "name":"java.io.RandomAccessFile"
-},
-{
   "name":"java.io.Reader"
 },
 {
@@ -1898,9 +1424,6 @@
 },
 {
   "name":"java.lang.Byte"
-},
-{
-  "name":"java.lang.CharSequence"
 },
 {
   "name":"java.lang.Character"
@@ -1991,21 +1514,10 @@
   "name":"java.lang.annotation.Retention"
 },
 {
-  "name":"java.lang.management.ManagementFactory",
-  "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.management.RuntimeMXBean",
-  "methods":[{"name":"getInputArguments","parameterTypes":[] }]
-},
-{
   "name":"java.lang.ref.ReferenceQueue"
 },
 {
   "name":"java.lang.ref.SoftReference"
-},
-{
-  "name":"java.lang.ref.WeakReference"
 },
 {
   "name":"java.lang.reflect.Array"
@@ -2033,9 +1545,6 @@
   "name":"java.net.InetAddress"
 },
 {
-  "name":"java.net.InetSocketAddress"
-},
-{
   "name":"java.net.MalformedURLException"
 },
 {
@@ -2046,9 +1555,6 @@
 },
 {
   "name":"java.net.Socket"
-},
-{
-  "name":"java.net.SocketAddress"
 },
 {
   "name":"java.net.SocketException"
@@ -2073,75 +1579,10 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
-  "name":"java.nio.Bits",
-  "fields":[{"name":"UNALIGNED"}]
-},
-{
-  "name":"java.nio.Buffer",
-  "fields":[{"name":"address"}]
-},
-{
-  "name":"java.nio.ByteBuffer",
-  "methods":[{"name":"alignedSlice","parameterTypes":["int"] }]
-},
-{
-  "name":"java.nio.CharBuffer"
-},
-{
-  "name":"java.nio.DirectByteBuffer",
-  "methods":[{"name":"<init>","parameterTypes":["long","int"] }]
-},
-{
-  "name":"java.nio.channels.Channels"
-},
-{
-  "name":"java.nio.channels.ClosedChannelException"
-},
-{
-  "name":"java.nio.channels.FileChannel"
-},
-{
-  "name":"java.nio.channels.FileChannel$MapMode"
-},
-{
-  "name":"java.nio.channels.Pipe"
-},
-{
-  "name":"java.nio.channels.ReadableByteChannel"
-},
-{
-  "name":"java.nio.channels.WritableByteChannel"
-},
-{
-  "name":"java.nio.channels.spi.AbstractSelectableChannel"
-},
-{
-  "name":"java.nio.channels.spi.SelectorProvider",
-  "methods":[
-    {"name":"openServerSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }, 
-    {"name":"openSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }
-  ]
-},
-{
-  "name":"java.nio.charset.Charset"
-},
-{
-  "name":"java.nio.charset.CharsetDecoder"
-},
-{
-  "name":"java.nio.charset.CoderResult"
-},
-{
-  "name":"java.nio.charset.CodingErrorAction"
+  "name":"java.nio.ByteBuffer"
 },
 {
   "name":"java.nio.file.Files"
-},
-{
-  "name":"java.nio.file.Path"
-},
-{
-  "name":"java.nio.file.StandardOpenOption"
 },
 {
   "name":"java.nio.file.attribute.FileAttribute"
@@ -2156,16 +1597,10 @@
   "name":"java.security.MessageDigest"
 },
 {
-  "name":"java.security.PrivateKey"
-},
-{
   "name":"java.security.SecureRandomParameters"
 },
 {
   "name":"java.security.SecurityPermission"
-},
-{
-  "name":"java.security.cert.X509Certificate"
 },
 {
   "name":"java.sql.BatchUpdateException"
@@ -2201,9 +1636,6 @@
   "name":"java.sql.Types"
 },
 {
-  "name":"java.text.DateFormat"
-},
-{
   "name":"java.text.ParseException"
 },
 {
@@ -2223,9 +1655,6 @@
 },
 {
   "name":"java.time.temporal.ChronoField"
-},
-{
-  "name":"java.util.ArrayDeque"
 },
 {
   "name":"java.util.ArrayList"
@@ -2271,9 +1700,6 @@
   "queryAllDeclaredMethods":true
 },
 {
-  "name":"java.util.PriorityQueue"
-},
-{
   "name":"java.util.Properties"
 },
 {
@@ -2308,22 +1734,13 @@
   "queryAllDeclaredMethods":true
 },
 {
-  "name":"java.util.concurrent.CancellationException"
-},
-{
   "name":"java.util.concurrent.CompletableFuture"
 },
 {
   "name":"java.util.concurrent.ConcurrentHashMap"
 },
 {
-  "name":"java.util.concurrent.ConcurrentLinkedQueue"
-},
-{
   "name":"java.util.concurrent.ConcurrentSkipListMap"
-},
-{
-  "name":"java.util.concurrent.CopyOnWriteArrayList"
 },
 {
   "name":"java.util.concurrent.CountDownLatch"
@@ -2336,9 +1753,6 @@
 },
 {
   "name":"java.util.concurrent.Executor"
-},
-{
-  "name":"java.util.concurrent.ExecutorService"
 },
 {
   "name":"java.util.concurrent.Executors"
@@ -2356,13 +1770,7 @@
   "name":"java.util.concurrent.LinkedBlockingQueue"
 },
 {
-  "name":"java.util.concurrent.RejectedExecutionException"
-},
-{
   "name":"java.util.concurrent.ScheduledExecutorService"
-},
-{
-  "name":"java.util.concurrent.ScheduledFuture"
 },
 {
   "name":"java.util.concurrent.ScheduledThreadPoolExecutor"
@@ -2383,16 +1791,10 @@
   "name":"java.util.concurrent.TimeoutException"
 },
 {
-  "name":"java.util.concurrent.atomic.AtomicBoolean"
-},
-{
   "name":"java.util.concurrent.atomic.AtomicInteger"
 },
 {
   "name":"java.util.concurrent.atomic.AtomicLong"
-},
-{
-  "name":"java.util.concurrent.atomic.AtomicReference"
 },
 {
   "name":"java.util.concurrent.atomic.AtomicReferenceArray"
@@ -2416,19 +1818,10 @@
   "name":"java.util.regex.Pattern"
 },
 {
-  "name":"java.util.stream.BaseStream"
-},
-{
   "name":"javax.net.ssl.KeyManagerFactory"
 },
 {
   "name":"javax.net.ssl.SSLContext"
-},
-{
-  "name":"javax.net.ssl.SSLHandshakeException"
-},
-{
-  "name":"javax.net.ssl.TrustManager"
 },
 {
   "name":"javax.net.ssl.TrustManagerFactory"
@@ -2438,10 +1831,6 @@
 },
 {
   "name":"javax.xml.datatype.XMLGregorianCalendar"
-},
-{
-  "name":"jdk.internal.misc.Unsafe",
-  "methods":[{"name":"getUnsafe","parameterTypes":[] }]
 },
 {
   "name":"jsonista.core.ReadValue"
@@ -2526,114 +1915,6 @@
 },
 {
   "name":"manifold.executor__init"
-},
-{
-  "name":"manifold.stream.BufferedStream"
-},
-{
-  "name":"manifold.stream.Callback"
-},
-{
-  "name":"manifold.stream.SinkProxy"
-},
-{
-  "name":"manifold.stream.SourceProxy"
-},
-{
-  "name":"manifold.stream.SplicedStream"
-},
-{
-  "name":"manifold.stream.async.CoreAsyncSink"
-},
-{
-  "name":"manifold.stream.async.CoreAsyncSource"
-},
-{
-  "name":"manifold.stream.async__init"
-},
-{
-  "name":"manifold.stream.core.IEventSink"
-},
-{
-  "name":"manifold.stream.core.IEventSource"
-},
-{
-  "name":"manifold.stream.core.IEventStream"
-},
-{
-  "name":"manifold.stream.core.Sinkable"
-},
-{
-  "name":"manifold.stream.core.Sourceable"
-},
-{
-  "name":"manifold.stream.core__init"
-},
-{
-  "name":"manifold.stream.default.Consumer"
-},
-{
-  "name":"manifold.stream.default.Consumption"
-},
-{
-  "name":"manifold.stream.default.Producer"
-},
-{
-  "name":"manifold.stream.default.Production"
-},
-{
-  "name":"manifold.stream.default.Stream"
-},
-{
-  "name":"manifold.stream.default__init"
-},
-{
-  "name":"manifold.stream.deferred.DeferredSink"
-},
-{
-  "name":"manifold.stream.deferred.DeferredSource"
-},
-{
-  "name":"manifold.stream.deferred__init"
-},
-{
-  "name":"manifold.stream.graph.AsyncPut"
-},
-{
-  "name":"manifold.stream.graph.Downstream"
-},
-{
-  "name":"manifold.stream.graph__init"
-},
-{
-  "name":"manifold.stream.iterator.IteratorSource"
-},
-{
-  "name":"manifold.stream.iterator__init"
-},
-{
-  "name":"manifold.stream.queue.BlockingQueueSink"
-},
-{
-  "name":"manifold.stream.queue.BlockingQueueSource"
-},
-{
-  "name":"manifold.stream.queue__init"
-},
-{
-  "name":"manifold.stream.random_access.RandomAccessSource"
-},
-{
-  "name":"manifold.stream.random_access__init"
-},
-{
-  "name":"manifold.stream.seq.SeqSource"
-},
-{
-  "name":"manifold.stream.seq__init"
-},
-{
-  "name":"manifold.stream__init"
 },
 {
   "name":"manifold.time.IClock"
@@ -2838,36 +2119,6 @@
 },
 {
   "name":"org.xnio.SslClientAuthMode"
-},
-{
-  "name":"potemkin.collections.PotemkinMap"
-},
-{
-  "name":"potemkin.collections.PotemkinMeta"
-},
-{
-  "name":"potemkin.collections__init"
-},
-{
-  "name":"potemkin.macros__init"
-},
-{
-  "name":"potemkin.namespaces__init"
-},
-{
-  "name":"potemkin.types.PotemkinType"
-},
-{
-  "name":"potemkin.types__init"
-},
-{
-  "name":"potemkin.utils__init"
-},
-{
-  "name":"potemkin.walk__init"
-},
-{
-  "name":"potemkin__init"
 },
 {
   "name":"reitit.Trie"
@@ -3081,15 +2332,6 @@
 },
 {
   "name":"spec_tools.visitor__init"
-},
-{
-  "name":"sun.misc.Unsafe",
-  "fields":[{"name":"theUnsafe"}],
-  "methods":[
-    {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, 
-    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, 
-    {"name":"storeFence","parameterTypes":[] }
-  ]
 },
 {
   "name":"sun.security.provider.NativePRNG",

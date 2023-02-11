@@ -14,30 +14,6 @@
       "pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
     }, 
     {
-      "pattern":"\\Qaleph/flow.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/flow__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/http/core.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/http/core__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/http/server.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/http/server__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/netty.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qaleph/netty__init.class\\E"
-    }, 
-    {
       "pattern":"\\Qbank/core.clj\\E"
     }, 
     {
@@ -129,54 +105,6 @@
     }, 
     {
       "pattern":"\\Qcamel_snake_kebab/internals/string_separator__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/char_sequence.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/char_sequence__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/graph.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/graph__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/protocols.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/protocols__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/pushback_stream.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/pushback_stream__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/utils.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams/utils__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/byte_streams__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/primitive_math.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_commons/primitive_math__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_tuple.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qclj_tuple__init.class\\E"
     }, 
     {
       "pattern":"\\Qclojure/core.clj\\E"
@@ -782,66 +710,6 @@
       "pattern":"\\Qmanifold/executor__init.class\\E"
     }, 
     {
-      "pattern":"\\Qmanifold/stream.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/async.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/async__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/core.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/core__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/default.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/default__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/deferred.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/deferred__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/graph.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/graph__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/iterator.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/iterator__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/queue.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/queue__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/random_access.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/random_access__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/seq.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream/seq__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qmanifold/stream__init.class\\E"
-    }, 
-    {
       "pattern":"\\Qmanifold/time.clj\\E"
     }, 
     {
@@ -990,48 +858,6 @@
     }, 
     {
       "pattern":"\\Qorg/tobereplaced/lettercase__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/collections.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/collections__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/macros.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/macros__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/namespaces.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/namespaces__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/types.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/types__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/utils.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/utils__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/walk.clj\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin/walk__init.class\\E"
-    }, 
-    {
-      "pattern":"\\Qpotemkin__init.class\\E"
     }, 
     {
       "pattern":"\\Qreitit/coercion.cljc\\E"
