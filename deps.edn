@@ -29,7 +29,7 @@
                               integrant/repl {:mvn/version "0.3.2"}
                               io.github.ljpengelen/integrant-repl-autoreload {:git/sha "2ae624990a7039184c2494546e3704155e9b353c"}}
                  :extra-paths ["dev"]}
-           :aleph {:extra-deps {aleph/aleph {:mvn/version "0.6.0"}}}
+           :aleph {:extra-deps {aleph/aleph {:mvn/version "0.6.1"}}}
            :jetty9 {:extra-deps {ring/ring-jetty-adapter {:mvn/version "1.9.6"}}}
            :jetty11 {:extra-deps {info.sunng/ring-jetty9-adapter {:mvn/version "0.18.3"}
                                   javax.servlet/servlet-api {:mvn/version "2.5"}}}
