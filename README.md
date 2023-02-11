@@ -66,3 +66,24 @@ Running the app using Aleph requires the alias `:aleph` to be active.
 On the command line, start the app using Jetty 9 and a single-arity handler by executing `SERVER_TYPE=:jetty-sync clojure -X:jetty9:run`.
 You need to take this into account when building a JAR too, if you want to build a JAR that supports either version of Jetty or Aleph.
 For example, execute `clojure -T:build clean && clojure -T:build uber :aliases "(:jetty9)"` to create an uberjar that supports Jetty 9.
+
+## Creating a native image
+
+Use the GraalVM tracing agent to find out which code is reachable and capture this information in the form of configuration
+files by first executing the following command:
+
+```
+java -agentlib:native-image-agent=config-output-dir=resources/META-INF/native-image/generated -jar target/bank-<version>-standalone.jar
+```
+
+While the app is running, perform some requests to allow the tracing agent to do its work.
+You can use the load tests for this.
+
+Afterwards, execute the following command to create a native image:
+
+```
+native-image -jar target/bank-<version>-standalone.jar --no-fallback \
+--initialize-at-build-time=ch.qos.logback \
+--initialize-at-build-time=org.slf4j \
+target/bank
+```
