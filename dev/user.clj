@@ -5,20 +5,16 @@
             [bank.domain :as domain]
             [clojure.core.async :refer [<!!]]
             [clojure.java.browse :refer [browse-url]]
-            [config.core :refer [reload-env]]
             [integrant-repl-autoreload.core :refer [start-auto-reset
                                                     stop-auto-reset]]
             [integrant.repl :refer [go halt reset set-prep!]]
             [integrant.repl.state :refer [system]]
             [migratus.core :as migratus]))
 
-(set-prep! (fn []
-             (reload-env)
-             (system-config)))
+(set-prep! system-config)
 
 (comment
   (go)
-  (reload-env)
   (reset)
   (halt)
   (start-auto-reset {:paths ["src" "resources" "dev"]})

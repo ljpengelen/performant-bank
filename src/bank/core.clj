@@ -5,7 +5,7 @@
             [bank.manifold.domain :as manifold-domain]
             [bank.manifold.middleware :as manifold-middleware]
             [bank.routes :refer [app]]
-            [config.core :refer [env]]
+            [config.core :refer [load-env]]
             [hikari-cp.core :as hcp]
             [integrant.core :as ig]
             [migratus.core :as migratus]
@@ -28,7 +28,8 @@
     (throw (ex-info "Invalid configuration: unknown async implementation" {:async-implementation async-implementation}))))
 
 (defn system-config []
-  (let [async-implementation (:async-implementation env)
+  (let [env (load-env)
+        async-implementation (:async-implementation env)
         server-type (:server-type env)
         async? (contains? #{:jetty-async :undertow-async} server-type)]
     {::datasource (get-in env [:db-config (:db env)])
